@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MyTitleLock - Lock Down Your Title</title>
+    <!-- Include Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #1e429f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #1e429f;
+        }
+
+        button {
+            background-color: #1e429f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        input[type="file"], input[type="text"] {
+            margin: 20px 0;
+            padding: 10px;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+        }
+
+        #hashOutput {
+            word-break: break-word;
+            margin: 20px 0;
+            color: #1e429f;
+        }
+
+        #receipt {
+            display: none;
+            background-color: #e6f7ff;
+            border: 2px solid #1e429f;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #777;
+        }
+
+        #retrievedLink {
+            display: none;
+            color: #1e429f;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>MyTitleLock - Lock Down Your Title</h1>
+    </div>
+
+    <div class="container">
+        <h2>Welcome to MyTitleLock</h2>
+        <p>Manage and verify title deeds securely using blockchain and IPFS technology. By uploading a title deed, we generate a unique "hash" for the document, which acts like a digital fingerprint. This hash is stored securely on the blockchain, ensuring tamper-proof authenticity. The hashing process is a one-way mathematical function that converts your document into a fixed string of characters, making it impossible to recreate the original document from the hash. This ensures that your title deed is both private and secure, while allowing easy verification of its integrity.</p>
+
+        <h3>Step 1: Connect Your Wallet</h3>
+        <button onclick="connectWallet('metamask')">Connect MetaMask</button>
+        <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
+        <button onclick="disconnectWallet()">Disconnect Wallet</button>
+        <p id="walletAddress">Not connected</p>
+
+        <h3>Step 2: Upload and Hash Your Title Deed</h3>
+        <input type="file" id="fileInput" accept=".pdf" />
+        <button onclick="uploadToIPFS()">Upload and Hash Document</button>
+        <p id="hashOutput"></p>
+
+        <h3>Step 3: Register Title Deed Hash on Blockchain</h3>
+        <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
+
+        <div id="receipt">
+            <h3>Transaction Receipt</h3>
+            <p id="receiptContent"></p>
+            <div id="qrCode"></div>
+        </div>
+
+        <h3>Step 4: Verify Title Deed</h3>
+        <button onclick="verifyDocument()">Verify Document</button>
+
+        <h3>Step 5: Retrieve Title Deed</h3>
+        <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
+        <button onclick="retrieveDocument()">Retrieve Document</button>
+        <a id="retrievedLink" href="#" target="_blank">Download Document</a>
+    </div>
+
+    <div class="footer">
+        &copy; 2023 MyTitleLock. All Rights Reserved.
+    </div>
+
+    <script>
+        let web3;
+        let contract;
+        let account;
+        let hashHex;
+        let ipfsHash;
+		
+		
+        const pinataApiKey = 'YOUR_PINATA_API_KEY';
+        const pinataSecretApiKey = 'YOUR_PINATA_SECRET_API_KEY';
+
+       // Contract ABI (Reformatted for Readability)
+        const contractABI = [
+            // Constructor
+            {
+                "type": "constructor",
+                "inputs": [],
+                "stateMutability": "nonpayable"
+            },
+            // Functions
+            {
+                "type": "function",
+                "name": "fee",
+                "inputs": [],
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "getDocumentDetails",
+                "inputs": [
+                    {
+                        "name": "_hash",
+                        "type": "bytes32",
+                        "internalType": "bytes32"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "name": "hash",
+                        "type": "bytes32",
+                        "internalType": "bytes32"
+                    },
+                    {
+                        "name": "timestamp",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "registrant",
+                        "type": "address",
+                        "internalType": "address"
+                    }
+                ],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "getFee",
+                "inputs": [],
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "isDocumentRegistered",
+                "inputs": [
+                    {
+                        "name": "_hash",
+                        "type": "bytes32",
+                        "internalType": "bytes32"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool",
+                        "internalType": "bool"
+                    }
+                ],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "owner",
+                "inputs": [],
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address",
+                        "internalType": "address"
+                    }
+                ],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "registerDocument",
+                "inputs": [
+                    {
+                        "name": "_hash",
+                        "type": "bytes32",
+                        "internalType": "bytes32"
+                    }
+                ],
+                "outputs": [],
+                "stateMutability": "payable"
+            },
+            {
+                "type": "function",
+                "name": "renounceOwnership",
+                "inputs": [],
+                "outputs": [],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "setFee",
+                "inputs": [
+                    {
+                        "name": "_newFee",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ],
+                "outputs": [],
+                "stateMutability": "nonpayable"
+            },
+            {
+                "type": "function",
+                "name": "transferOwnership",
+                "inputs": [
+                    {
+                        "name": "",
+                        "type": "address",
+                        "internalType": "address"
+                    }
+                ],
+                "outputs": [],
+                "stateMutability": "view"
+            },
+            {
+                "type": "function",
+                "name": "withdrawFees",
+                "inputs": [],
+                "outputs": [],
+                "stateMutability": "nonpayable"
+            },
+            // Events
+            {
+                "type": "event",
+                "name": "DocumentRegistered",
+                "inputs": [
+                    {
+                        "name": "hash",
+                        "type": "bytes32",
+                        "indexed": true,
+                        "internalType": "bytes32"
+                    },
+                    {
+                        "name": "registrant",
+                        "type": "address",
+                        "indexed": true,
+                        "internalType": "address"
+                    },
+                    {
+                        "name": "timestamp",
+                        "type": "uint256",
+                        "indexed": false,
+                        "internalType": "uint256"
+                    }
+                ],
+                "anonymous": false
+            },
+            {
+                "type": "event",
+                "name": "OwnershipTransferred",
+                "inputs": [
+                    {
+                        "name": "previousOwner",
+                        "type": "address",
+                        "indexed": true,
+                        "internalType": "address"
+                    },
+                    {
+                        "name": "newOwner",
+                        "type": "address",
+                        "indexed": true,
+                        "internalType": "address"
+                    }
+                ],
+                "anonymous": false
+            },
+            // Errors
+            {
+                "type": "error",
+                "name": "OwnableInvalidOwner",
+                "inputs": [
+                    {
+                        "name": "owner",
+                        "type": "address",
+                        "internalType": "address"
+                    }
+                ]
+            },
+            {
+                "type": "error",
+                "name": "OwnableUnauthorizedAccount",
+                "inputs": [
+                    {
+                        "name": "account",
+                        "type": "address",
+                        "internalType": "address"
+                    }
+                ]
+            }
+        ];
+
+        // Contract address (Ensure this matches your deployed contract)
+        const contractAddress = '0xca2f282ab9d7b2ae33FDe040142C1c185B6591b4';
+
+       async function connectWallet(wallet) {
+            if (wallet === 'metamask') {
+                if (window.ethereum && window.ethereum.isMetaMask) {
+                    selectedProvider = window.ethereum;
+                } else {
+                    alert('MetaMask is not installed. Please install MetaMask and try again.');
+                    return;
+                }
+            } else if (wallet === 'coinbase') {
+                // Initialize Coinbase Wallet SDK
+                coinbaseWallet = new CoinbaseWalletSDK({
+                    appName: 'LockChain',
+                    appLogoUrl: 'https://yourapp.com/logo.png',
+                    darkMode: false
+                });
+                const coinbaseProvider = coinbaseWallet.makeWeb3Provider();
+                selectedProvider = coinbaseProvider;
+            } else {
+                alert('Unsupported wallet selected');
+                return;
+            }
+
+            try {
+                web3 = new Web3(selectedProvider);
+                // Request account access if needed
+                await selectedProvider.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                account = accounts[0];
+                document.getElementById('walletAddress').innerText = 'Connected: ' + account;
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                // Check network
+                await checkNetwork();
+
+                // Fetch and display the current fee
+                await displayCurrentFee();
+
+                console.log('Connected account:', account);
+            } catch (error) {
+                console.error('Error connecting to wallet:', error);
+                alert('Error connecting to wallet.');
+            }
+        }
+
+        function disconnectWallet() {
+            if (selectedProvider && selectedProvider.close) {
+                selectedProvider.close();
+            }
+            selectedProvider = null;
+            web3 = null;
+            account = null;
+            document.getElementById('walletAddress').innerText = 'Not connected';
+            alert('Wallet disconnected');
+        }
+        // Function to fetch and display the current fee
+        async function displayCurrentFee() {
+            try {
+                const feeInWei = await contract.methods.getFee().call();
+                const feeInEth = web3.utils.fromWei(feeInWei, 'ether');
+                document.getElementById('currentFee').innerText = feeInEth + ' ETH';
+                document.getElementById('buttonFee').innerText = feeInEth + ' ETH';
+                document.getElementById('feeAmount').innerText = feeInEth + ' ETH';
+                document.getElementById('dynamicFee').innerText = feeInEth + ' ETH'; // Update dynamicFee
+            } catch (error) {
+                console.error('Error fetching current fee:', error);
+                alert('Error fetching current fee from the contract.');
+            }
+        }
+
+        // Function to hash the selected document
+        async function hashDocument() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a PDF file.');
+                return;
+            }
+
+            const arrayBuffer = await file.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            hashHex = '0x' + hashHex; // Add '0x' prefix to the hash
+            document.getElementById('hashOutput').innerText = `Document Hash: ${hashHex}`;
+
+            // Enable the register button
+            document.getElementById('registerButton').disabled = false;
+        }
+
+        // Function to register the hashed document on the blockchain
+        async function registerHashOnBlockchain() {
+            if (!web3 || !account) {
+                alert('Please connect your MetaMask wallet first.');
+                return;
+            }
+
+            if (!hashHex) {
+                alert('Please hash a document first.');
+                return;
+            }
+
+            const hashBytes32 = hashHex;
+
+            try {
+                const isRegistered = await contract.methods.isDocumentRegistered(hashBytes32).call();
+                if (isRegistered) {
+                    alert('This document is already registered.');
+                    return;
+                }
+
+                // Fetch the current fee from the contract
+                const feeInWei = await contract.methods.getFee().call();
+
+                // Show the loading overlay
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
+                const receipt = await contract.methods.registerDocument(hashBytes32).send({
+                    from: account,
+                    value: feeInWei, // Use the dynamic fee
+                });
+
+                console.log('Transaction receipt:', receipt);
+                generateReceipt(hashHex, account, receipt.transactionHash);
+            } catch (error) {
+                console.error('Error registering hash on blockchain:', error);
+                alert('Error registering hash on blockchain. See console for details.');
+            } finally {
+                // Hide the loading overlay
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        }
+
+        // Function to generate and display the transaction receipt
+        function generateReceipt(hashHex, account, transactionHash) {
+            const timestamp = new Date().toLocaleString();
+            const receiptContent = `
+                <strong>Document Hash:</strong> ${hashHex}<br>
+                <strong>Registered By:</strong> ${account}<br>
+                <strong>Date and Time:</strong> ${timestamp}<br>
+                <strong>Transaction Hash:</strong> <a href="https://sepolia.etherscan.io/tx/${transactionHash}" target="_blank">${transactionHash}</a>
+            `;
+            document.getElementById('receiptContent').innerHTML = receiptContent;
+            document.getElementById('receipt').style.display = 'block';
+        }
+
+        // Function to verify a document's registration status
+        async function verifyDocument() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.pdf';
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    alert('No file selected.');
+                    return;
+                }
+
+                const arrayBuffer = await file.arrayBuffer();
+                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHexToVerify = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                try {
+                    const isRegistered = await contract.methods.isDocumentRegistered(hashHexToVerify).call();
+                    if (isRegistered) {
+                        const details = await contract.methods.getDocumentDetails(hashHexToVerify).call();
+                        alert(`Document is registered.\nRegistrant: ${details.registrant}\nTimestamp: ${new Date(details.timestamp * 1000).toLocaleString()}`);
+                    } else {
+                        alert('Document is not registered.');
+                    }
+                } catch (error) {
+                    console.error('Error verifying document:', error);
+                    alert('Error verifying document.');
+                }
+            };
+            fileInput.click();
+        }
+
+       async function checkNetwork() {
+            const chainId = await web3.eth.getChainId();
+            if (chainId !== 11155111) { // Sepolia's chain ID
+                try {
+                    await selectedProvider.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0xaa36a7' }], // 11155111 in hexadecimal
+                    });
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        alert('Please add the Sepolia network to your wallet.');
+                    } else {
+                        console.error('Error switching network:', switchError);
+                    }
+                }
+            }
+        }
+
+        // Handle account and chain changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                window.location.reload();
+            });
+
+            window.ethereum.on('chainChanged', function (chainId) {
+                window.location.reload();
+            });
+        }
+		
+       
+
+        async function uploadToIPFS() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${pinataApiKey}:${pinataSecretApiKey}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload file to IPFS.');
+                }
+
+                const data = await response.json();
+                ipfsHash = data.IpfsHash;
+
+                const arrayBuffer = await file.arrayBuffer();
+                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                document.getElementById('hashOutput').innerText = `Document Hash: ${hashHex}\nIPFS Hash: ${ipfsHash}`;
+                document.getElementById('registerButton').disabled = false;
+            } catch (error) {
+                console.error('Error uploading to IPFS:', error);
+                alert('Failed to upload file to IPFS. See console for details.');
+            }
+        }
+
+       
+
+        async function retrieveDocument() {
+            const ipfsHash = document.getElementById('retrieveHash').value.trim();
+
+            if (!ipfsHash) {
+                alert('Please enter an IPFS hash.');
+                return;
+            }
+
+            const ipfsGatewayURL = `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+            const linkElement = document.getElementById('retrievedLink');
+
+            try {
+                const response = await fetch(ipfsGatewayURL, { method: 'HEAD' });
+                if (response.ok) {
+                    linkElement.href = ipfsGatewayURL;
+                    linkElement.style.display = 'block';
+                    linkElement.innerText = 'Download Document';
+                } else {
+                    alert('The document is not available on IPFS.');
+                }
+            } catch (error) {
+                console.error('Error retrieving document:', error);
+                alert('Failed to retrieve document. See console for details.');
+            }
+        }
+    </script>
+</body>
+</html>
