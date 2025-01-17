@@ -422,20 +422,25 @@
             document.getElementById('walletAddress').innerText = 'Not connected';
             alert('Wallet disconnected');
         }
+
         // Function to fetch and display the current fee
         async function displayCurrentFee() {
-            try {
-                const feeInWei = await contract.methods.getFee().call();
-                const feeInEth = web3.utils.fromWei(feeInWei, 'ether');
-                document.getElementById('currentFee').innerText = feeInEth + ' ETH';
-                document.getElementById('buttonFee').innerText = feeInEth + ' ETH';
-                document.getElementById('feeAmount').innerText = feeInEth + ' ETH';
-                document.getElementById('dynamicFee').innerText = feeInEth + ' ETH'; // Update dynamicFee
-            } catch (error) {
-                console.error('Error fetching current fee:', error);
-                alert('Error fetching current fee from the contract.');
-            }
-        }
+	    try {
+	        const feeInWei = await contract.methods.getFee().call();
+	        const feeInEth = web3.utils.fromWei(feeInWei, 'ether');
+	
+	        const feeNotice = document.createElement('p');
+	        feeNotice.id = 'feeNotice';
+	        feeNotice.innerText = `A small fee of ${feeInEth} ETH is required to register your document on the blockchain.`;
+	
+	        const container = document.querySelector('.container');
+	        container.appendChild(feeNotice);
+	    } catch (error) {
+	        console.error('Error fetching current fee:', error);
+	        alert('Error fetching current fee from the contract.');
+	    }
+	}
+
 
         // Function to hash the selected document
         async function hashDocument() {
@@ -578,7 +583,7 @@
 		
        
 
-    async function uploadToIPFS() {
+  async function uploadToIPFS() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
 
@@ -587,7 +592,7 @@
         return;
     }
 
-    // Validate file size (e.g., 50 MB)
+    // Validate file size
     const maxFileSize = 50 * 1024 * 1024; // 50 MB
     if (file.size > maxFileSize) {
         alert('File size exceeds the 50 MB limit.');
@@ -600,10 +605,7 @@
     try {
         const response = await fetch('http://localhost:3000/upload', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${YOUR_PINATA_JWT}`
-            },
-            body: formData
+            body: formData,
         });
 
         if (!response.ok) {
@@ -611,12 +613,22 @@
         }
 
         const data = await response.json();
-        console.log('Uploaded file to IPFS:', data);
+        ipfsHash = data.IpfsHash;
+
+        // Generate hash for blockchain registration
+        const arrayBuffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        document.getElementById('hashOutput').innerText = `Document Hash: ${hashHex}\nIPFS Hash: ${ipfsHash}`;
+        document.getElementById('registerButton').disabled = false;
     } catch (error) {
         console.error('Error uploading to IPFS:', error);
         alert('Failed to upload file to IPFS. See console for details.');
     }
 }
+
 
        
 
