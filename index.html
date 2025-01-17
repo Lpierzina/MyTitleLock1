@@ -108,10 +108,10 @@
         <button onclick="disconnectWallet()">Disconnect Wallet</button>
         <p id="walletAddress">Not connected</p>
 
-        <h3>Step 2: Upload and Hash Your Title Deed</h3>
-        <input type="file" id="fileInput" accept=".pdf" />
-        <button onclick="uploadToIPFS()">Upload and Hash Document</button>
-        <p id="hashOutput"></p>
+       <h3>Step 2: Upload and Hash Your Title Deed</h3>
+	<input type="file" id="fileInput" accept=".pdf" />
+	<button onclick="uploadToIPFS()">Upload and Hash Document</button>
+	<p id="hashOutput"></p>
 
         <h3>Step 3: Register Title Deed Hash on Blockchain</h3>
         <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
@@ -143,8 +143,8 @@
         let ipfsHash;
 		
 		
-        const pinataApiKey = 'f42199a13ac147265484';
-        const pinataSecretApiKey = '5038299823e8e48840686df41e328043fc9f52143df355cb6a6b8c5198737742';
+        const pinataApiKey = 'PINATA_API_KEY';
+        const pinataSecretApiKey = 'PINATA_SECRET_API_KEY';
 
        // Contract ABI (Reformatted for Readability)
         const contractABI = [
@@ -579,45 +579,47 @@
        
 
         async function uploadToIPFS() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
 
-            if (!file) {
-                alert('Please select a file.');
-                return;
+    if (!file) {
+        alert('Please select a file.');
+        return;
+    }
+
+    try {
+        // Read file content as text
+        const reader = new FileReader();
+        reader.onload = async function () {
+            const fileContent = reader.result;
+
+            const response = await fetch('http://localhost:3000/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fileName: file.name,
+                    fileContent,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload file to Pinata.');
             }
 
-            const formData = new FormData();
-            formData.append('file', file);
+            const data = await response.json();
+            const ipfsHash = data.IpfsHash;
 
-            try {
-                const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${pinataApiKey}:${pinataSecretApiKey}`
-                    },
-                    body: formData
-                });
+            document.getElementById('hashOutput').innerText = `IPFS Hash: ${ipfsHash}`;
+        };
 
-                if (!response.ok) {
-                    throw new Error('Failed to upload file to IPFS.');
-                }
-
-                const data = await response.json();
-                ipfsHash = data.IpfsHash;
-
-                const arrayBuffer = await file.arrayBuffer();
-                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-                document.getElementById('hashOutput').innerText = `Document Hash: ${hashHex}\nIPFS Hash: ${ipfsHash}`;
-                document.getElementById('registerButton').disabled = false;
-            } catch (error) {
-                console.error('Error uploading to IPFS:', error);
-                alert('Failed to upload file to IPFS. See console for details.');
-            }
-        }
+        reader.readAsText(file);
+    } catch (error) {
+        console.error('Error uploading to IPFS:', error);
+        alert('Failed to upload file to IPFS.');
+    }
+}
 
        
 
