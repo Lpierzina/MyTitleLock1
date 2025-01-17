@@ -593,7 +593,7 @@
 	    formData.append('file', file);
 	
 	    try {
-		const response = await fetch('https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload', {
+	        const response = await fetch('https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload', {
 	            method: 'POST',
 	            body: formData,
 	        });
@@ -609,6 +609,7 @@
 	        alert('Failed to upload file. Please try again.');
 	    }
 	}
+
        
 
         async function retrieveDocument() {
