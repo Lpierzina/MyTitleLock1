@@ -578,7 +578,7 @@
 		
        
 
-        async function uploadToIPFS() {
+    async function uploadToIPFS() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
 
@@ -587,37 +587,34 @@
         return;
     }
 
+    // Validate file size (e.g., 50 MB)
+    const maxFileSize = 50 * 1024 * 1024; // 50 MB
+    if (file.size > maxFileSize) {
+        alert('File size exceeds the 50 MB limit.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
     try {
-        // Read file content as text
-        const reader = new FileReader();
-        reader.onload = async function () {
-            const fileContent = reader.result;
+        const response = await fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${YOUR_PINATA_JWT}`
+            },
+            body: formData
+        });
 
-            const response = await fetch('http://localhost:3000/upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fileName: file.name,
-                    fileContent,
-                }),
-            });
+        if (!response.ok) {
+            throw new Error('Failed to upload file to Pinata.');
+        }
 
-            if (!response.ok) {
-                throw new Error('Failed to upload file to Pinata.');
-            }
-
-            const data = await response.json();
-            const ipfsHash = data.IpfsHash;
-
-            document.getElementById('hashOutput').innerText = `IPFS Hash: ${ipfsHash}`;
-        };
-
-        reader.readAsText(file);
+        const data = await response.json();
+        console.log('Uploaded file to IPFS:', data);
     } catch (error) {
         console.error('Error uploading to IPFS:', error);
-        alert('Failed to upload file to IPFS.');
+        alert('Failed to upload file to IPFS. See console for details.');
     }
 }
 
