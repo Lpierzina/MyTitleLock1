@@ -97,6 +97,10 @@
     <div class="navbar">
         <h1>MyTitleLock - Lock Down Your Title</h1>
     </div>
+	
+<div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; display: flex; justify-content: center; align-items: center;">
+    <p style="color: white; font-size: 20px;">Processing... Please wait.</p>
+</div>
 
     <div class="container">
         <h2>Welcome to MyTitleLock</h2>
@@ -438,6 +442,12 @@
 	    }
 	}
 
+function toggleLoadingOverlay(show) {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = show ? 'flex' : 'none';
+    }
+}
 
         // Function to hash the selected document
         async function hashDocument() {
@@ -461,47 +471,44 @@
         }
 
         // Function to register the hashed document on the blockchain
-        async function registerHashOnBlockchain() {
-            if (!web3 || !account) {
-                alert('Please connect your MetaMask wallet first.');
-                return;
-            }
+       async function registerHashOnBlockchain() {
+    if (!web3 || !account) {
+        alert('Please connect your MetaMask wallet first.');
+        return;
+    }
 
-            if (!hashHex) {
-                alert('Please hash a document first.');
-                return;
-            }
+    if (!hashHex) {
+        alert('Please hash a document first.');
+        return;
+    }
 
-            const hashBytes32 = hashHex;
+    toggleLoadingOverlay(true); // Show overlay
 
-            try {
-                const isRegistered = await contract.methods.isDocumentRegistered(hashBytes32).call();
-                if (isRegistered) {
-                    alert('This document is already registered.');
-                    return;
-                }
-
-                // Fetch the current fee from the contract
-                const feeInWei = await contract.methods.getFee().call();
-
-                // Show the loading overlay
-                document.getElementById('loadingOverlay').style.display = 'flex';
-
-                const receipt = await contract.methods.registerDocument(hashBytes32).send({
-                    from: account,
-                    value: feeInWei, // Use the dynamic fee
-                });
-
-                console.log('Transaction receipt:', receipt);
-                generateReceipt(hashHex, account, receipt.transactionHash);
-            } catch (error) {
-                console.error('Error registering hash on blockchain:', error);
-                alert('Error registering hash on blockchain. See console for details.');
-            } finally {
-                // Hide the loading overlay
-                document.getElementById('loadingOverlay').style.display = 'none';
-            }
+    try {
+        const isRegistered = await contract.methods.isDocumentRegistered(hashHex).call();
+        if (isRegistered) {
+            alert('This document is already registered.');
+            return;
         }
+
+        // Fetch the current fee from the contract
+        const feeInWei = await contract.methods.getFee().call();
+
+        const receipt = await contract.methods.registerDocument(hashHex).send({
+            from: account,
+            value: feeInWei, // Use the dynamic fee
+        });
+
+        console.log('Transaction receipt:', receipt);
+        alert('Document registered successfully!');
+    } catch (error) {
+        console.error('Error registering hash on blockchain:', error);
+        alert('Error registering hash on blockchain. See console for details.');
+    } finally {
+        toggleLoadingOverlay(false); // Hide overlay
+    }
+}
+
 
         // Function to generate and display the transaction receipt
         function generateReceipt(hashHex, account, transactionHash) {
@@ -589,10 +596,12 @@
         return;
     }
 
-    const formData = new FormData();
-    formData.append('file', file);
+    toggleLoadingOverlay(true); // Show overlay
 
     try {
+        const formData = new FormData();
+        formData.append('file', file);
+
         const response = await fetch('https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload', {
             method: 'POST',
             body: formData,
@@ -605,20 +614,13 @@
         const data = await response.json();
         document.getElementById('hashOutput').innerText = `IPFS Hash: ${data.IpfsHash}`;
 
-        // Generate the SHA-256 hash of the file
-        const arrayBuffer = await file.arrayBuffer();
-        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-        console.log('Generated hashHex:', hashHex); // Log for debugging
-
         // Enable the "Register on Blockchain" button
         document.getElementById('registerButton').disabled = false;
-
     } catch (error) {
         console.error('Error uploading file:', error);
         alert('Failed to upload file. Please try again.');
+    } finally {
+        toggleLoadingOverlay(false); // Hide overlay
     }
 }
 
