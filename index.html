@@ -185,9 +185,9 @@
             distributes data across a peer-to-peer network, ensuring no single point of failure.
         </p>
         <ul>
-            <li><strong>Decentralized & Resilient:</strong> Files are stored globally, so even if one node goes offline, 
+            <li><strong>Decentralized &amp; Resilient:</strong> Files are stored globally, so even if one node goes offline, 
                 the data remains accessible. Perfect for critical documents like deeds or insurance records.</li>
-            <li><strong>Immutable & Tamper-Proof:</strong> Each file is identified by a unique cryptographic hash. Any 
+            <li><strong>Immutable &amp; Tamper-Proof:</strong> Each file is identified by a unique cryptographic hash. Any 
                 modification changes the hash, making unauthorized edits immediately detectable.</li>
             <li><strong>Cost-Efficient:</strong> IPFS pinning services are often cheaper than traditional cloud storage, 
                 and you pay only for the data you want pinned. No large hosting overhead.</li>
@@ -211,8 +211,8 @@
 
     <div class="fee-structure">
         <strong>File Size Fee Structure (PayPal):</strong><br/>
-        - Up to 1MB: <strong>FREE</strong><br/>
-        - 1MB &ndash; 5MB: <strong>$5</strong><br/>
+        - Up to 0.5MB: <strong>FREE</strong><br/>
+        - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
         - 5MB &ndash; 20MB: <strong>$10</strong><br/>
         - 20MB &ndash; 50MB: <strong>$20</strong><br/>
         <em>Files over 50MB are not accepted.</em>
@@ -579,14 +579,14 @@
         }
     }
 
-    // This function checks the file size & sets "uploadCostUSD"
+    // Adjusted Fee Logic: Up to 0.5MB is free, 0.5–5MB => $5, 5–20MB => $10, 20–50MB => $20
     function determineFeeBySize(fileSizeBytes) {
         const sizeMB = fileSizeBytes / (1024 * 1024); // convert bytes to MB
         if (sizeMB > 50) {
             alert('File too large! Max limit is 50 MB.');
             return -1; // indicates an invalid file
         }
-        if (sizeMB <= 1) {
+        if (sizeMB <= 0.5) {
             return 0;
         } else if (sizeMB <= 5) {
             return 5;
