@@ -6,10 +6,10 @@
     <!-- Include Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
+    
     <!-- PayPal SDK (Replace with your own CLIENT-ID) -->
     <script src="https://www.paypal.com/sdk/js?client-id=REPLACE_WITH_YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
-
+    
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         body {
@@ -43,8 +43,9 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             color: #1e429f;
+            margin-top: 25px;
         }
 
         button {
@@ -132,7 +133,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* PayPal button container hidden by default, shown as needed */
+        /* PayPal button container (hidden by default) */
         #paypal-button-container {
             display: none;
             margin-bottom: 20px;
@@ -145,6 +146,24 @@
             margin-top: 15px;
             border-radius: 5px;
         }
+
+        .marketing-section {
+            margin-top: 40px;
+            padding: 15px;
+            background: #fffcee;
+            border: 1px solid #f7daa3;
+            border-radius: 5px;
+        }
+        .marketing-section h3 {
+            color: #cc6600;
+            margin-top: 0;
+        }
+        .marketing-section ul {
+            margin: 0 0 1em 1.4em;
+        }
+        .marketing-section strong {
+            color: #cc6600;
+        }
     </style>
 </head>
 
@@ -156,6 +175,39 @@
 <div class="container">
     <h2>Welcome to MyTitleLock</h2>
     <p>Manage and verify title deeds securely using blockchain and IPFS technology. By uploading a title deed, we generate a unique "hash" for the document, which acts like a digital fingerprint. This hash is stored securely on the blockchain, ensuring tamper-proof authenticity. The hashing process is a one-way mathematical function that converts your document into a fixed string of characters, making it impossible to recreate the original document from the hash. This ensures that your title deed is both private and secure, while allowing easy verification of its integrity.</p>
+
+    <!-- New Marketing / Educational Section -->
+    <div class="marketing-section">
+        <h3>Why IPFS and Blockchain for Your Title Deeds?</h3>
+        <p>
+            <strong>IPFS (InterPlanetary File System)</strong> is a decentralized file storage and sharing protocol 
+            that makes the web faster, safer, and more resilient. Instead of relying on centralized servers, IPFS 
+            distributes data across a peer-to-peer network, ensuring no single point of failure.
+        </p>
+        <ul>
+            <li><strong>Decentralized & Resilient:</strong> Files are stored globally, so even if one node goes offline, 
+                the data remains accessible. Perfect for critical documents like deeds or insurance records.</li>
+            <li><strong>Immutable & Tamper-Proof:</strong> Each file is identified by a unique cryptographic hash. Any 
+                modification changes the hash, making unauthorized edits immediately detectable.</li>
+            <li><strong>Cost-Efficient:</strong> IPFS pinning services are often cheaper than traditional cloud storage, 
+                and you pay only for the data you want pinned. No large hosting overhead.</li>
+            <li><strong>Censorship-Resistance:</strong> No central entity can remove or censor data on IPFS, vital for 
+                legal documents that must remain accessible and accurate.</li>
+            <li><strong>Global Accessibility:</strong> Anyone with the file’s hash can retrieve it from IPFS, making 
+                cross-border title searches and verifications seamless.</li>
+        </ul>
+        <p>
+            <strong>Blockchain Integration</strong>: By storing only the document’s hash on a blockchain, you get a 
+            tamper-proof registry of ownership. Combining IPFS (for the file) with blockchain (for the record) 
+            yields a trustless, immutable system for verifying title authenticity—no single authority can alter 
+            the record.
+        </p>
+        <p>
+            <em>In short, IPFS + Blockchain ensures your title documents are secure, verifiable, and always within reach 
+            — a future-proof solution for property management, insurance, and beyond.</em>
+        </p>
+    </div>
+    <!-- End Marketing Section -->
 
     <div class="fee-structure">
         <strong>File Size Fee Structure (PayPal):</strong><br/>
@@ -174,7 +226,7 @@
 
     <h3>Step 2: Upload and Pay (If Required)</h3>
     <input type="file" id="fileInput" accept=".pdf" />
-    <!-- The PayPal button container (hidden initially, shown if payment is required) -->
+    <!-- PayPal button container -->
     <div id="paypal-button-container"></div>
 
     <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
@@ -228,7 +280,6 @@
     let lastUploadedFileName = ''; // store the file name to show in receipt
     let uploadCostUSD = 0;         // how much the user must pay based on file size
     let fileToUpload = null;       // store the actual File object for reference
-
     // Contract ABI
     const contractABI = [
         {
