@@ -7,9 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
-    <!-- PayPal SDK (Replace with your own CLIENT-ID) -->
-    <script src="https://www.paypal.com/sdk/js?client-id=REPLACE_WITH_YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         body {
@@ -19,21 +16,18 @@
             margin: 0;
             padding: 0;
         }
-
         .navbar {
             background-color: #1e429f;
             color: white;
             padding: 20px;
             text-align: center;
         }
-
         .navbar h1 {
             margin: 0;
             font-size: 24px;
             line-height: 1.2;
             color: white;
         }
-
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -42,12 +36,9 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
         h1, h2, h3 {
             color: #1e429f;
-            margin-top: 25px;
         }
-
         button {
             background-color: #1e429f;
             color: white;
@@ -56,31 +47,21 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
-
         input[type="file"], input[type="text"] {
             margin: 20px 0;
             padding: 10px;
             width: calc(100% - 22px);
             box-sizing: border-box;
         }
-
-        #fileNameOutput {
-            margin: 10px 0 0;
-            color: #555;
-            font-style: italic;
-        }
-
         #hashOutput {
             word-break: break-word;
-            margin: 10px 0 20px;
+            margin: 20px 0;
             color: #1e429f;
         }
-
         #receipt {
             display: none;
             background-color: #e6f7ff;
@@ -89,183 +70,173 @@
             border-radius: 5px;
             margin-top: 20px;
         }
-
         .footer {
             text-align: center;
             margin-top: 50px;
             color: #777;
         }
-
         #retrievedLink {
             display: none;
             color: #1e429f;
             text-decoration: underline;
             margin-top: 10px;
         }
-
-        /* Spinner Overlay Styles */
-        #loadingOverlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .spinner {
-            border: 8px solid #f3f3f3; /* Light gray */
-            border-top: 8px solid #1e429f; /* Blue */
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* PayPal button container (hidden by default) */
-        #paypal-button-container {
-            display: none;
-            margin-bottom: 20px;
-        }
-
-        .fee-structure {
-            background-color: #f0f8ff;
-            border: 1px solid #1e429f;
-            padding: 10px;
-            margin-top: 15px;
-            border-radius: 5px;
-        }
-
-        .marketing-section {
-            margin-top: 40px;
-            padding: 15px;
+        /* Example styling for the new sections */
+        .why-store-section {
+            margin-top: 30px;
             background: #fffcee;
             border: 1px solid #f7daa3;
+            padding: 15px;
             border-radius: 5px;
         }
-        .marketing-section h3 {
-            color: #cc6600;
+        .ipfs-section, .blockchain-section {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        .ipfs-section h3, .blockchain-section h3 {
             margin-top: 0;
-        }
-        .marketing-section ul {
-            margin: 0 0 1em 1.4em;
-        }
-        .marketing-section strong {
-            color: #cc6600;
         }
     </style>
 </head>
-
 <body>
 <div class="navbar">
     <h1>MyTitleLock - Lock Down Your Title</h1>
 </div>
 
 <div class="container">
-    <h2>Welcome to MyTitleLock</h2>
-    <p>Manage and verify title deeds securely using blockchain and IPFS technology. By uploading a title deed, we generate a unique "hash" for the document, which acts like a digital fingerprint. This hash is stored securely on the blockchain, ensuring tamper-proof authenticity. The hashing process is a one-way mathematical function that converts your document into a fixed string of characters, making it impossible to recreate the original document from the hash. This ensures that your title deed is both private and secure, while allowing easy verification of its integrity.</p>
 
-    <!-- New Marketing / Educational Section -->
-    <div class="marketing-section">
-        <h3>Why IPFS and Blockchain for Your Title Deeds?</h3>
+    <!-- EXAMPLE: "Why Store Documents on MyTitleLock?" Section -->
+    <div class="why-store-section">
+        <h2>Why Store Documents on MyTitleLock?</h2>
+
+        <h3>Prevent Tampering &amp; Fraud</h3>
         <p>
-            <strong>IPFS (InterPlanetary File System)</strong> is a decentralized file storage and sharing protocol 
-            that makes the web faster, safer, and more resilient. Instead of relying on centralized servers, IPFS 
-            distributes data across a peer-to-peer network, ensuring no single point of failure.
+            By hashing your file and storing that hash on the blockchain, you create an unchangeable proof 
+            that the document existed exactly as-is at the time of registration. If anyone edits the document, 
+            the hash no longer matches—instantly revealing any forgery.
+        </p>
+
+        <h3>Decentralized &amp; Always Accessible</h3>
+        <p>
+            Traditional storage can fail if a single server goes down or a company closes. But IPFS spreads 
+            files across many computers worldwide. Even if one “node” is offline, others keep the file available. 
+            Your important records stay safe and globally accessible.
+        </p>
+
+        <h3>Privacy &amp; Security</h3>
+        <p>
+            <strong>Privacy:</strong> Only the file’s hash goes onto the blockchain—not the actual file. This means 
+            no one can read your document just by looking at the blockchain record.
+        </p>
+        <p>
+            <strong>Security:</strong> Because IPFS uses cryptographic hashes, any small change creates a new hash. 
+            This prevents hidden alterations or data manipulation.
+        </p>
+
+        <h3>Lower Costs</h3>
+        <p>
+            Storing large files on a centralized service can be expensive, but with IPFS, you pay primarily for 
+            what you choose to “pin.” Our fee structure ensures you pay only for the file sizes you actually upload—nothing more.
+        </p>
+
+        <h3>Future-Proof for Legal Needs</h3>
+        <p>
+            In a dispute, you can produce your tamper-proof, time-stamped hash from the blockchain and retrieve the 
+            exact file from IPFS. This level of immutability is invaluable for title deeds, contracts, insurance documents, 
+            or any record requiring legal certainty.
+        </p>
+
+        <h3>Easy Setup with Your Wallet</h3>
+        <p>
+            MyTitleLock integrates directly with MetaMask or Coinbase Wallet. One click connects your wallet, and 
+            a small ETH fee registers your file’s hash on the blockchain. It’s as simple as uploading your document 
+            and clicking “Register on Blockchain.”
+        </p>
+
+        <h3>How It All Works</h3>
+        <p>
+            <strong>Upload Document</strong> &rarr; We generate a unique hash using a one-way function.
+            <br/>
+            <strong>Store on IPFS</strong> &rarr; Your file is distributed across a peer-to-peer network, 
+            ensuring resilient, censorship-proof access.
+            <br/>
+            <strong>Register on Blockchain</strong> &rarr; The hash is permanently recorded, creating a proof 
+            of existence. No central authority can alter or remove it.
+        </p>
+
+        <h3>Start Protecting Your Documents Now</h3>
+        <p>
+            With MyTitleLock, your documents are safer, always retrievable, and legally verifiable. 
+            Why trust a single server or paper record when you can harness the power of decentralization? 
+            Upload today, and experience peace of mind knowing your titles, deeds, or critical records 
+            are truly locked down.
+        </p>
+    </div>
+    <!-- END: "Why Store Documents" Section -->
+
+
+    <!-- IPFS SECTION -->
+    <div class="ipfs-section">
+        <h3>Upload &amp; Hash Your Document (IPFS)</h3>
+        <p>
+            Files over 50MB are not accepted. Below is our Fee Structure:
         </p>
         <ul>
-            <li><strong>Decentralized &amp; Resilient:</strong> Files are stored globally, so even if one node goes offline, 
-                the data remains accessible. Perfect for critical documents like deeds or insurance records.</li>
-            <li><strong>Immutable &amp; Tamper-Proof:</strong> Each file is identified by a unique cryptographic hash. Any 
-                modification changes the hash, making unauthorized edits immediately detectable.</li>
-            <li><strong>Cost-Efficient:</strong> IPFS pinning services are often cheaper than traditional cloud storage, 
-                and you pay only for the data you want pinned. No large hosting overhead.</li>
-            <li><strong>Censorship-Resistance:</strong> No central entity can remove or censor data on IPFS, vital for 
-                legal documents that must remain accessible and accurate.</li>
-            <li><strong>Global Accessibility:</strong> Anyone with the file’s hash can retrieve it from IPFS, making 
-                cross-border title searches and verifications seamless.</li>
+            <li>Up to 0.5MB: FREE</li>
+            <li>0.5MB &ndash; 5MB: $5</li>
+            <li>5MB &ndash; 20MB: $10</li>
+            <li>20MB &ndash; 50MB: $20</li>
         </ul>
+
+        <!-- This is your file upload step -->
+        <input type="file" id="fileInput" accept=".pdf" />
+        <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
+        <p id="fileNameOutput"></p>
+        <p id="hashOutput"></p>
+    </div>
+    <!-- END: IPFS SECTION -->
+
+
+    <!-- BLOCKCHAIN SECTION -->
+    <div class="blockchain-section">
+        <h3>Register on the Blockchain</h3>
         <p>
-            <strong>Blockchain Integration</strong>: By storing only the document’s hash on a blockchain, you get a 
-            tamper-proof registry of ownership. Combining IPFS (for the file) with blockchain (for the record) 
-            yields a trustless, immutable system for verifying title authenticity—no single authority can alter 
-            the record.
+            A small ETH fee is required to record your document hash on the blockchain. 
+            This ensures tamper-proof authenticity and makes your record publicly verifiable.
         </p>
-        <p>
-            <em>In short, IPFS + Blockchain ensures your title documents are secure, verifiable, and always within reach 
-            — a future-proof solution for property management, insurance, and beyond.</em>
-        </p>
+
+        <!-- Moved wallet buttons here -->
+        <h4>Connect Your Wallet</h4>
+        <button onclick="connectWallet('metamask')">Connect MetaMask</button>
+        <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
+        <button onclick="disconnectWallet()">Disconnect Wallet</button>
+        <p id="walletAddress">Not connected</p>
+
+        <!-- Registration on blockchain -->
+        <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
+
+        <!-- Receipt area -->
+        <div id="receipt">
+            <h3>Transaction Receipt</h3>
+            <p id="receiptContent"></p>
+            <div id="qrCode" style="margin-top:10px;"></div>
+            <p style="color:red; margin-top:15px;">
+                <strong>IMPORTANT:</strong> Save or print this receipt!
+                You will need the information and/or QR code to verify or retrieve your document in the future.
+            </p>
+        </div>
     </div>
-    <!-- End Marketing Section -->
+    <!-- END: BLOCKCHAIN SECTION -->
 
-    <div class="fee-structure">
-        <strong>File Size Fee Structure (PayPal):</strong><br/>
-        - Up to 0.5MB: <strong>FREE</strong><br/>
-        - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
-        - 5MB &ndash; 20MB: <strong>$10</strong><br/>
-        - 20MB &ndash; 50MB: <strong>$20</strong><br/>
-        <em>Files over 50MB are not accepted.</em>
-    </div>
 
-    <h3>Step 1: Connect Your Wallet</h3>
-    <button onclick="connectWallet('metamask')">Connect MetaMask</button>
-    <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
-    <button onclick="disconnectWallet()">Disconnect Wallet</button>
-    <p id="walletAddress">Not connected</p>
-
-    <h3>Step 2: Upload and Pay (If Required)</h3>
-    <input type="file" id="fileInput" accept=".pdf" />
-    <!-- PayPal button container -->
-      <!-- The dynamic PayPal button container (for bigger tiers) -->
-    <div id="paypal-button-container" style="display:none;"></div>
-
-    <!-- The *static* PayPal form for the $5 tier (hidden by default) -->
-    <div id="paypal-manual-button-5" style="display:none; margin:10px 0;">
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-            <input type="hidden" name="cmd" value="_s-xclick" />
-            <input type="hidden" name="hosted_button_id" value="3HDJF5JNMU8X4" />
-            <input type="hidden" name="currency_code" value="USD" />
-            <input type="image"
-                   src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif"
-                   border="0"
-                   name="submit"
-                   alt="Buy Now" />
-        </form>
-    </div>
-
-    <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
-    <!-- file name & hash output, etc. -->
-    <p id="fileNameOutput"></p>
-    <p id="hashOutput"></p>
-
-    <h3>Step 3: Register Title Deed Hash on Blockchain</h3>
-    <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
-
-    <div id="receipt">
-        <h3>Transaction Receipt</h3>
-        <p id="receiptContent"></p>
-        <div id="qrCode" style="margin-top:10px;"></div>
-        <p style="color:red; margin-top:15px;">
-            <strong>IMPORTANT:</strong> Save or print this receipt!
-            You will need the information and/or QR code to verify or retrieve your document in the future.
-        </p>
-    </div>
-
-    <h3>Step 4: Verify Title Deed</h3>
+    <!-- Step 4: Verify Title Deed (unchanged) -->
+    <h3>Verify Title Deed</h3>
     <button onclick="verifyDocument()">Verify Document</button>
 
-    <h3>Step 5: Retrieve Title Deed</h3>
+    <!-- Step 5: Retrieve Title Deed (unchanged) -->
+    <h3>Retrieve Title Deed</h3>
     <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
     <button onclick="retrieveDocument()">Retrieve Document</button>
     <a id="retrievedLink" href="#" target="_blank">Download Document</a>
@@ -282,7 +253,6 @@
 <div class="footer">
     &copy; 2023 MyTitleLock. All Rights Reserved.
 </div>
-
 <script>
     let web3;
     let contract;
