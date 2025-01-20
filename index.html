@@ -6,8 +6,12 @@
     <!-- Include Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    
+
+    <!-- PayPal SDK (Replace with your own CLIENT-ID) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=REPLACE_WITH_YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -81,7 +85,7 @@
             text-decoration: underline;
             margin-top: 10px;
         }
-        /* Example styling for the new sections */
+        /* Example styling for the sections */
         .why-store-section {
             margin-top: 30px;
             background: #fffcee;
@@ -100,6 +104,7 @@
         }
     </style>
 </head>
+
 <body>
 <div class="navbar">
     <h1>MyTitleLock - Lock Down Your Title</h1>
@@ -107,75 +112,137 @@
 
 <div class="container">
 
-    <!-- EXAMPLE: "Why Store Documents on MyTitleLock?" Section -->
+    <!-- WHY STORE DOCUMENTS ON MYTITLELOCK? -->
     <div class="why-store-section">
         <h2>Why Store Documents on MyTitleLock?</h2>
 
         <h3>Prevent Tampering &amp; Fraud</h3>
         <p>
-            By hashing your file and storing that hash on the blockchain, you create an unchangeable proof 
-            that the document existed exactly as-is at the time of registration. If anyone edits the document, 
+            By hashing your file and storing that hash on the blockchain, you create an unchangeable proof
+            that the document existed exactly as-is at the time of registration. If anyone edits the document,
             the hash no longer matches—instantly revealing any forgery.
         </p>
 
         <h3>Decentralized &amp; Always Accessible</h3>
         <p>
-            Traditional storage can fail if a single server goes down or a company closes. But IPFS spreads 
-            files across many computers worldwide. Even if one “node” is offline, others keep the file available. 
+            Traditional storage can fail if a single server goes down or a company closes. But IPFS spreads
+            files across many computers worldwide. Even if one “node” is offline, others keep the file available.
             Your important records stay safe and globally accessible.
         </p>
 
         <h3>Privacy &amp; Security</h3>
         <p>
-            <strong>Privacy:</strong> Only the file’s hash goes onto the blockchain—not the actual file. This means 
+            <strong>Privacy:</strong> Only the file’s hash goes onto the blockchain—not the actual file. This means
             no one can read your document just by looking at the blockchain record.
         </p>
         <p>
-            <strong>Security:</strong> Because IPFS uses cryptographic hashes, any small change creates a new hash. 
+            <strong>Security:</strong> Because IPFS uses cryptographic hashes, any small change creates a new hash.
             This prevents hidden alterations or data manipulation.
         </p>
 
         <h3>Lower Costs</h3>
         <p>
-            Storing large files on a centralized service can be expensive, but with IPFS, you pay primarily for 
+            Storing large files on a centralized service can be expensive, but with IPFS, you pay primarily for
             what you choose to “pin.” Our fee structure ensures you pay only for the file sizes you actually upload—nothing more.
         </p>
 
         <h3>Future-Proof for Legal Needs</h3>
         <p>
-            In a dispute, you can produce your tamper-proof, time-stamped hash from the blockchain and retrieve the 
-            exact file from IPFS. This level of immutability is invaluable for title deeds, contracts, insurance documents, 
+            In a dispute, you can produce your tamper-proof, time-stamped hash from the blockchain and retrieve the
+            exact file from IPFS. This level of immutability is invaluable for title deeds, contracts, insurance documents,
             or any record requiring legal certainty.
         </p>
 
         <h3>Easy Setup with Your Wallet</h3>
         <p>
-            MyTitleLock integrates directly with MetaMask or Coinbase Wallet. One click connects your wallet, and 
-            a small ETH fee registers your file’s hash on the blockchain. It’s as simple as uploading your document 
+            MyTitleLock integrates directly with MetaMask or Coinbase Wallet. One click connects your wallet, and
+            a small ETH fee registers your file’s hash on the blockchain. It’s as simple as uploading your document
             and clicking “Register on Blockchain.”
         </p>
 
         <h3>How It All Works</h3>
         <p>
-            <strong>Upload Document</strong> &rarr; We generate a unique hash using a one-way function.
-            <br/>
-            <strong>Store on IPFS</strong> &rarr; Your file is distributed across a peer-to-peer network, 
-            ensuring resilient, censorship-proof access.
-            <br/>
-            <strong>Register on Blockchain</strong> &rarr; The hash is permanently recorded, creating a proof 
+            <strong>Upload Document</strong> &rarr; We generate a unique hash using a one-way function.<br/>
+            <strong>Store on IPFS</strong> &rarr; Your file is distributed across a peer-to-peer network,
+            ensuring resilient, censorship-proof access.<br/>
+            <strong>Register on Blockchain</strong> &rarr; The hash is permanently recorded, creating a proof
             of existence. No central authority can alter or remove it.
         </p>
 
         <h3>Start Protecting Your Documents Now</h3>
         <p>
-            With MyTitleLock, your documents are safer, always retrievable, and legally verifiable. 
-            Why trust a single server or paper record when you can harness the power of decentralization? 
-            Upload today, and experience peace of mind knowing your titles, deeds, or critical records 
+            With MyTitleLock, your documents are safer, always retrievable, and legally verifiable.
+            Why trust a single server or paper record when you can harness the power of decentralization?
+            Upload today, and experience peace of mind knowing your titles, deeds, or critical records
             are truly locked down.
         </p>
     </div>
-    <!-- END: "Why Store Documents" Section -->
+    <!-- END: WHY STORE DOCUMENTS SECTION -->
 
+    <!-- NEW IPFS INTRODUCTION SUMMARY (MARKETING FOCUS) -->
+    <div class="why-store-section" style="margin-top: 20px;">
+        <h2>Introducing IPFS: Safe &amp; Decentralized Document Storage</h2>
+
+        <p>
+            <strong>What Is IPFS?</strong><br/>
+            IPFS (InterPlanetary File System) is a global, peer-to-peer file network that breaks your file into
+            small pieces and stores them across many computers worldwide. Instead of depending on a single server
+            or company, your file is spread out and always accessible.
+        </p>
+
+        <h3>Why It’s Safe</h3>
+        <ul>
+            <li><strong>Redundant &amp; Decentralized:</strong> No single point of failure—if one node goes down,
+                other nodes still have your file. This ensures your critical documents are always retrievable.</li>
+            <li><strong>Content-Based Addressing:</strong> Every file is located by its unique cryptographic hash.
+                If anyone changes even one letter in your file, the hash changes, exposing any tampering.</li>
+            <li><strong>Immutable Storage:</strong> Since each file fragment is verified against its hash, no one
+                can alter it without creating a brand-new hash. This makes your documents effectively tamper-proof.</li>
+        </ul>
+
+        <h3>Try It for Free (Up to 0.5MB)</h3>
+        <p>
+            We understand you might want to test the platform first. That’s why MyTitleLock allows free uploads for
+            files under 0.5MB. Upload a small document, see how the hash and IPFS storage work, and experience the
+            benefits of decentralized storage—all at no charge!
+        </p>
+
+        <h3>Secure Registration with Blockchain &amp; PayPal</h3>
+        <p>
+            <strong>Blockchain Registration:</strong> We store your document’s unique hash on the blockchain for
+            a tamper-proof record. No one—not even us—can alter it after it’s recorded.
+        </p>
+        <p>
+            <strong>PayPal-Enabled:</strong> For files larger than 0.5MB, we charge a small fee (based on file size)
+            to cover IPFS pinning and blockchain costs. You can easily pay using PayPal, a secure, globally recognized
+            payment method. Once confirmed, we finalize your IPFS upload and registration on the blockchain.
+        </p>
+
+        <h3>How It Works in 3 Easy Steps</h3>
+        <ol>
+            <li><strong>Upload:</strong> Select your PDF and click “Upload &amp; Hash.” Files under 0.5MB are free; for
+                larger files, you can pay with PayPal.</li>
+            <li><strong>Register:</strong> We record the hash on the blockchain, creating a tamper-proof record of ownership.</li>
+            <li><strong>Verify:</strong> Anyone can re-hash the file and compare it to the on-chain record. If they match,
+                the file is authentic.</li>
+        </ol>
+
+        <h3>Why Trust MyTitleLock?</h3>
+        <ul>
+            <li><strong>User-Friendly:</strong> We handle the hashing and registration. No deep blockchain knowledge needed.</li>
+            <li><strong>Affordable:</strong> Pay only for the exact storage you need. Under 0.5MB is free!</li>
+            <li><strong>Flexible Payments:</strong> We support ETH transaction fees and PayPal for bigger files—no crypto required.</li>
+            <li><strong>Future-Proof:</strong> IPFS + blockchain ensures long-term, censorship-resistant availability.</li>
+        </ul>
+
+        <p>
+            <strong>Ready to Protect Your Documents?</strong><br/>
+            - Give It a Try: Upload a small file (0.5MB or less) for free.<br/>
+            - Secure Larger Documents: Pay via PayPal for bigger files.<br/>
+            - Rest Easy: Your files remain immutable and verifiable—today, tomorrow, or years down the line.
+        </p>
+    </div>
+    <!-- END: IPFS INTRO SUMMARY -->
 
     <!-- IPFS SECTION -->
     <div class="ipfs-section">
@@ -198,23 +265,20 @@
     </div>
     <!-- END: IPFS SECTION -->
 
-
     <!-- BLOCKCHAIN SECTION -->
     <div class="blockchain-section">
         <h3>Register on the Blockchain</h3>
         <p>
-            A small ETH fee is required to record your document hash on the blockchain. 
+            A small ETH fee is required to record your document hash on the blockchain.
             This ensures tamper-proof authenticity and makes your record publicly verifiable.
         </p>
 
-        <!-- Moved wallet buttons here -->
         <h4>Connect Your Wallet</h4>
         <button onclick="connectWallet('metamask')">Connect MetaMask</button>
         <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
         <button onclick="disconnectWallet()">Disconnect Wallet</button>
         <p id="walletAddress">Not connected</p>
 
-        <!-- Registration on blockchain -->
         <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
 
         <!-- Receipt area -->
@@ -230,12 +294,11 @@
     </div>
     <!-- END: BLOCKCHAIN SECTION -->
 
-
-    <!-- Step 4: Verify Title Deed (unchanged) -->
+    <!-- Step 4: Verify Title Deed -->
     <h3>Verify Title Deed</h3>
     <button onclick="verifyDocument()">Verify Document</button>
 
-    <!-- Step 5: Retrieve Title Deed (unchanged) -->
+    <!-- Step 5: Retrieve Title Deed -->
     <h3>Retrieve Title Deed</h3>
     <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
     <button onclick="retrieveDocument()">Retrieve Document</button>
@@ -253,6 +316,7 @@
 <div class="footer">
     &copy; 2023 MyTitleLock. All Rights Reserved.
 </div>
+
 <script>
     let web3;
     let contract;
