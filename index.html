@@ -74,6 +74,12 @@
       border-radius: 5px;
       margin-top: 20px;
     }
+    #parcelResult {
+      background: #fafafa; border: 1px solid #ddd;
+      padding: 10px; margin-top: 10px; max-height: 300px; overflow: auto;
+      font-family: monospace; font-size: 0.9em;
+    }
+    
     .footer {
       text-align: center;
       margin-top: 50px;
@@ -331,6 +337,28 @@
     <!-- PayPal button container (hidden by default) -->
     <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
 
+  <div class="container">
+  <h2>Maricopa Parcel Lookup &amp; IPFS Integration</h2>
+
+  <!-- 1) APN Lookup -->
+  <div>
+    <h3>Lookup a Parcel (APN)</h3>
+    <input type="text" id="apnInput" placeholder="e.g. 123-45-678" />
+    <button onclick="lookupParcel()">Lookup Parcel</button>
+    <div id="parcelActions" style="margin-top:10px; display:none;">
+      <button onclick="downloadParcelJSON()">Download JSON</button>
+      <button onclick="uploadParcelJSON()">Upload to IPFS</button>
+    </div>
+    <pre id="parcelResult"></pre>
+  </div>
+
+  <!-- 2) Once you have IPFS hash of the data, you can do "Register on Blockchain" etc. -->
+  <div id="parcelIpfsHash" style="color:#1e429f; margin-top:10px;"></div>
+
+  <!-- Insert your existing IPFS/Blockchain registration code, 
+       PayPal payment flows, etc. below if you want to share the same page. -->
+</div>
+
   <!-- BLOCKCHAIN SECTION -->
   <div class="blockchain-section">
     <h3>Register on the Blockchain</h3>
@@ -407,6 +435,11 @@
     let lastUploadedFileName = ''; // store the file name to show in receipt
     let uploadCostUSD = 0;         // how much the user must pay based on file size
     let fileToUpload = null;       // store the actual File object for reference
+
+    const MARICOPA_TOKEN = 'fd5916c7-4f5d-430a-9c9d-26af124e0833'; // your token
+    let currentParcelData = null;  // store the JSON result in memory
+    let currentParcelIpfsHash = null;
+
 
     
     // Contract ABI
@@ -767,6 +800,121 @@
             loadingOverlay.style.display = show ? 'flex' : 'none';
         }
     }
+
+/*****************************************************************
+  1) LOOKUP PARCEL
+*****************************************************************/
+async function lookupParcel() {
+  const apn = document.getElementById('apnInput').value.trim();
+  if (!apn) {
+    alert('Please enter a valid APN (e.g. 123-45-678).');
+    return;
+  }
+
+  // reset any old data
+  currentParcelData = null;
+  document.getElementById('parcelResult').textContent = '';
+  document.getElementById('parcelIpfsHash').textContent = '';
+  document.getElementById('parcelActions').style.display = 'none';
+
+  try {
+    // Example: GET /parcel/{apn}
+    const url = `https://mcassessor.maricopa.gov/parcel/${apn}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'AUTHORIZATION': MARICOPA_TOKEN,
+        'user-agent': 'null'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Maricopa API error: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // store it & display
+    currentParcelData = data;
+    document.getElementById('parcelResult').textContent = JSON.stringify(data, null, 2);
+
+    // show action buttons
+    document.getElementById('parcelActions').style.display = 'inline-block';
+
+  } catch (err) {
+    console.error(err);
+    alert('Error fetching parcel data. Check console for details.');
+  }
+}
+
+/*****************************************************************
+  2) DOWNLOAD PARCEL JSON
+*****************************************************************/
+function downloadParcelJSON() {
+  if (!currentParcelData) {
+    alert('No parcel data to download. Lookup an APN first.');
+    return;
+  }
+
+  // Convert to JSON string
+  const jsonStr = JSON.stringify(currentParcelData, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+
+  // create a temporary link
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'parcel-data.json';
+  link.click();
+
+  // clean up
+  URL.revokeObjectURL(url);
+}
+
+/*****************************************************************
+  3) UPLOAD PARCEL JSON TO IPFS
+     (Using your existing IPFS server endpoint, etc.)
+*****************************************************************/
+async function uploadParcelJSON() {
+  if (!currentParcelData) {
+    alert('No parcel data found. Please lookup an APN first.');
+    return;
+  }
+
+  // Convert data to a file-like object (Blob)
+  const jsonStr = JSON.stringify(currentParcelData, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+
+  // create FormData & append
+  const formData = new FormData();
+  formData.append('file', blob, 'parcel-data.json');
+
+  // send to your IPFS endpoint
+  // e.g. 'https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload'
+  // or wherever your existing code references
+  try {
+    const response = await fetch('https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload', {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) {
+      throw new Error('Failed to upload JSON to IPFS server.');
+    }
+    const result = await response.json();
+
+    // result should have something like { IpfsHash: 'QmXYZ...' }
+    currentParcelIpfsHash = result.IpfsHash;
+    document.getElementById('parcelIpfsHash').textContent =
+      `Parcel data uploaded to IPFS! Hash: ${currentParcelIpfsHash}`;
+
+    // from here, you can let them "Register on Blockchain" if you want,
+    // or tie it into your existing code that registers a hash on chain.
+  } catch (error) {
+    console.error(error);
+    alert('Error uploading parcel JSON to IPFS. See console for details.');
+  }
+}
+
+  
 
     // Adjusted Fee Logic: Up to 0.5MB is free, 0.5–5MB => $5, 5–20MB => $10, 20–50MB => $20
     function determineFeeBySize(fileSizeBytes) {
