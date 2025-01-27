@@ -7,6 +7,8 @@
   <!-- Include Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=REPLACE_WITH_YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
 
@@ -375,6 +377,8 @@
 <!-- Valuation Table or Chart -->
 <div id="valuationSection" style="display:none; margin-top:20px;">
   <h3>Valuations Over Time</h3>
+  <!-- The new canvas for your chart -->
+  <canvas id="valuationChart" width="400" height="200"></canvas>
   <table id="valuationTable" border="1" cellpadding="5" style="border-collapse: collapse;">
     <thead>
       <tr>
@@ -928,8 +932,36 @@ async function lookupParcel() {
         tbody.appendChild(tr);
       });
 
-      document.getElementById('valuationSection').style.display = 'block';
+     // Now show the section
+  document.getElementById('valuationSection').style.display = 'block';
+
+  // Build arrays for the chart
+  const years = data.Valuations.map(v => v.TaxYear);
+  // Convert FullCashValue to a numeric type (default to 0 if missing)
+  const fcvValues = data.Valuations.map(v => parseInt(v.FullCashValue || '0', 10));
+
+  // Create the chart
+  const ctx = document.getElementById('valuationChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [{
+        label: 'Full Cash Value',
+        data: fcvValues,
+        backgroundColor: 'rgba(30, 66, 159, 0.2)',
+        borderColor: 'rgba(30, 66, 159, 1)',
+        borderWidth: 2,
+        fill: true,
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
     }
+  });
+}
 
     // 5) Parcel Sketch
     // The JSON you provided has "Sketches.Pages[0].Sketch" as a Base64 PNG
