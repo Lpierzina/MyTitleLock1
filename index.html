@@ -818,27 +818,19 @@ async function lookupParcel() {
   document.getElementById('parcelActions').style.display = 'none';
 
   try {
-    // Example: GET /parcel/{apn}
+    // Call your Heroku proxy
     const url = `https://polar-stream-23993-43b80ccd3a73.herokuapp.com/maricopa/parcel?apn=${apn}`;
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'AUTHORIZATION': MARICOPA_TOKEN,
-        'user-agent': 'null'
-      }
-    });
+    // No custom headers needed; your backend sets the token
+    const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error(`Maricopa API error: ${response.status}`);
+      throw new Error(`Proxy error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
 
-    // store it & display
     currentParcelData = data;
     document.getElementById('parcelResult').textContent = JSON.stringify(data, null, 2);
-
-    // show action buttons
     document.getElementById('parcelActions').style.display = 'inline-block';
 
   } catch (err) {
@@ -846,6 +838,7 @@ async function lookupParcel() {
     alert('Error fetching parcel data. Check console for details.');
   }
 }
+
 
 /*****************************************************************
   2) DOWNLOAD PARCEL JSON
