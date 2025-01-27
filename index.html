@@ -819,7 +819,8 @@ async function lookupParcel() {
 
   try {
     // Example: GET /parcel/{apn}
-    const url = `https://mcassessor.maricopa.gov/parcel/${apn}`;
+    const url = `https://polar-stream-23993-43b80ccd3a73.herokuapp.com/maricopa/parcel?apn=${apn}`;
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {
