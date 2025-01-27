@@ -350,7 +350,49 @@
       <button onclick="uploadParcelJSON()">Upload to IPFS</button>
     </div>
     <pre id="parcelResult"></pre>
-  </div>
+  <!-- Owner & Deed Info -->
+<div id="ownerSection" style="display:none; margin-top:20px;">
+  <h3>Owner Details</h3>
+  <p><strong>Owner Name:</strong> <span id="ownerName"></span></p>
+  <p><strong>Deed Date:</strong> <span id="ownerDeedDate"></span></p>
+  <p><strong>Sale Price:</strong> <span id="ownerSalePrice"></span></p>
+  <p><strong>Sale Date:</strong> <span id="ownerSaleDate"></span></p>
+  <p>
+    <strong>View Deed:</strong>
+    <a id="viewDeedLink" href="#" target="_blank">Open Maricopa Recorder</a>
+  </p>
+</div>
+
+<!-- Official County Links -->
+<div id="countyLinksSection" style="display:none; margin-top:20px;">
+  <h3>Official County Links</h3>
+  <p>
+    <a id="mcrLink" href="#" target="_blank">Subdivision Map (MCR)</a> |
+    <a id="treasurerLink" href="#" target="_blank">Treasurer Tax Info</a>
+  </p>
+</div>
+
+<!-- Valuation Table or Chart -->
+<div id="valuationSection" style="display:none; margin-top:20px;">
+  <h3>Valuations Over Time</h3>
+  <table id="valuationTable" border="1" cellpadding="5" style="border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Tax Year</th>
+        <th>Full Cash Value</th>
+        <th>Limited Property Value</th>
+        <th>Legal Classification</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- Sketch Image -->
+<div id="sketchSection" style="display:none; margin-top:20px;">
+  <h3>Parcel Sketch</h3>
+  <img id="sketchImage" alt="Parcel Sketch" style="max-width:400px; border:1px solid #ccc;" />
+</div>
 
   <!-- 2) Once you have IPFS hash of the data, you can do "Register on Blockchain" etc. -->
   <div id="parcelIpfsHash" style="color:#1e429f; margin-top:10px;"></div>
@@ -811,33 +853,101 @@ async function lookupParcel() {
     return;
   }
 
-  // reset any old data
   currentParcelData = null;
   document.getElementById('parcelResult').textContent = '';
   document.getElementById('parcelIpfsHash').textContent = '';
   document.getElementById('parcelActions').style.display = 'none';
 
+  // Hide sections until we have valid data
+  document.getElementById('ownerSection').style.display = 'none';
+  document.getElementById('countyLinksSection').style.display = 'none';
+  document.getElementById('valuationSection').style.display = 'none';
+  document.getElementById('sketchSection').style.display = 'none';
+
   try {
-    // Call your Heroku proxy
     const url = `https://polar-stream-23993-43b80ccd3a73.herokuapp.com/maricopa/parcel?apn=${apn}`;
-
-    // No custom headers needed; your backend sets the token
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error(`Proxy error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
 
+    // 1) Display raw JSON for debugging
     currentParcelData = data;
     document.getElementById('parcelResult').textContent = JSON.stringify(data, null, 2);
     document.getElementById('parcelActions').style.display = 'inline-block';
 
+    // 2) Parse & Display Owner Info
+    if (data.Owner) {
+      const ownerObj = data.Owner;
+      document.getElementById('ownerName').textContent = ownerObj.Ownership || 'N/A';
+      document.getElementById('ownerDeedDate').textContent = ownerObj.DeedDate || 'N/A';
+      document.getElementById('ownerSalePrice').textContent = ownerObj.SalePrice || 'N/A';
+      document.getElementById('ownerSaleDate').textContent = ownerObj.SaleDate || 'N/A';
+
+      // Link to official deed
+      if (data.DeedTransitionUrl) {
+        document.getElementById('viewDeedLink').href = data.DeedTransitionUrl;
+      }
+
+      document.getElementById('ownerSection').style.display = 'block';
+    }
+
+    // 3) Official County Links
+    if (data.McrTransitionUrl || data.TreasurersTransitionUrl) {
+      if (data.McrTransitionUrl) {
+        document.getElementById('mcrLink').href = data.McrTransitionUrl;
+      }
+      if (data.TreasurersTransitionUrl) {
+        document.getElementById('treasurerLink').href = data.TreasurersTransitionUrl;
+      }
+      document.getElementById('countyLinksSection').style.display = 'block';
+    }
+
+    // 4) Valuations
+    if (Array.isArray(data.Valuations) && data.Valuations.length > 0) {
+      const tbody = document.querySelector('#valuationTable tbody');
+      tbody.innerHTML = ''; // clear any old rows
+
+      data.Valuations.forEach(val => {
+        const tr = document.createElement('tr');
+        // TaxYear, FullCashValue, LimitedPropertyValue, LegalClassification
+        const tdYear = document.createElement('td');
+        tdYear.textContent = val.TaxYear || 'N/A';
+        const tdFCV = document.createElement('td');
+        tdFCV.textContent = val.FullCashValue || 'N/A';
+        const tdLPV = document.createElement('td');
+        tdLPV.textContent = val.LimitedPropertyValue || 'N/A';
+        const tdClass = document.createElement('td');
+        tdClass.textContent = val.LegalClassification || 'N/A';
+
+        tr.appendChild(tdYear);
+        tr.appendChild(tdFCV);
+        tr.appendChild(tdLPV);
+        tr.appendChild(tdClass);
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('valuationSection').style.display = 'block';
+    }
+
+    // 5) Parcel Sketch
+    // The JSON you provided has "Sketches.Pages[0].Sketch" as a Base64 PNG
+    if (data.Sketches && data.Sketches.Pages && data.Sketches.Pages.length > 0) {
+      const base64Sketch = data.Sketches.Pages[0].Sketch;
+      if (base64Sketch) {
+        const sketchImageEl = document.getElementById('sketchImage');
+        // Turn the base64 into a data URI for an <img>
+        sketchImageEl.src = `data:image/png;base64,${base64Sketch}`;
+        document.getElementById('sketchSection').style.display = 'block';
+      }
+    }
   } catch (err) {
     console.error(err);
     alert('Error fetching parcel data. Check console for details.');
   }
 }
+
 
 
 /*****************************************************************
