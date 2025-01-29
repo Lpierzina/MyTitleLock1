@@ -378,7 +378,12 @@
 
     <!-- PayPal button container (hidden by default) -->
     <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
+  
+<button onclick="toggleSection('maricopaSection')">Maricopa County Parcel Lookup</button>
+<p>If you own property in Maricopa County, you can look it up here.</p>
 
+<!-- This entire block is hidden by default -->
+<div id="maricopaSection" style="display:none;">
   <div class="container">
   <h2>Maricopa Parcel Lookup &amp; IPFS Integration</h2>
     <p>
@@ -460,6 +465,8 @@
   <!-- Insert your existing IPFS/Blockchain registration code, 
        PayPal payment flows, etc. below if you want to share the same page. -->
 </div>
+</div>
+    
  <h3>Retrieve Title Deed</h3>
     <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
     <button onclick="retrieveDocument()">Retrieve Document</button>
