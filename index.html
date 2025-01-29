@@ -460,7 +460,13 @@
   <!-- Insert your existing IPFS/Blockchain registration code, 
        PayPal payment flows, etc. below if you want to share the same page. -->
 </div>
+ <h3>Retrieve Title Deed</h3>
+    <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
+    <button onclick="retrieveDocument()">Retrieve Document</button>
+    <a id="retrievedLink" href="#" target="_blank">Download Document</a>
 
+
+    
   <!-- BLOCKCHAIN SECTION -->
   <div class="blockchain-section">
     <h3>Register on the Blockchain</h3>
@@ -507,12 +513,7 @@
     <h3>Verify Title Deed</h3>
     <button onclick="verifyDocument()">Verify Document</button>
 
-    <h3>Retrieve Title Deed</h3>
-    <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
-    <button onclick="retrieveDocument()">Retrieve Document</button>
-    <a id="retrievedLink" href="#" target="_blank">Download Document</a>
-
-</div>
+ </div>
 
 <!-- Spinner Overlay -->
 <div id="loadingOverlay">
@@ -1211,51 +1212,58 @@ async function uploadParcelJSON() {
         }).render('#paypal-button-container');
     }
 
-    // 9) Actually upload to IPFS (after PayPal or if free)
-    async function uploadToIPFS() {
-        if (!fileToUpload) {
-            alert('No file is selected. Please select a file first.');
-            return;
-        }
-        toggleLoadingOverlay(true);
-        try {
-            const formData = new FormData();
-            formData.append('file', fileToUpload);
-
-            const response = await fetch(
-                'https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload',
-                {
-                    method: 'POST',
-                    body: formData
-                }
-            );
-            if (!response.ok) {
-                throw new Error('Failed to upload file to server.');
-            }
-            const data = await response.json();
-
-            // IPFS Hash (from Pinata)
-            ipfsHash = data.IpfsHash;
-            document.getElementById('hashOutput').innerText = `IPFS Hash: ${ipfsHash}`;
-
-            // Now do a separate SHA-256 of the file for the contract
-            const arrayBuffer = await fileToUpload.arrayBuffer();
-            const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-            // Enable the "Register on Blockchain" button
-            document.getElementById('registerButton').disabled = false;
-
-            // Clear out fileToUpload (not strictly necessary)
-            fileToUpload = null;
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            alert('Failed to upload file. Please try again.');
-        } finally {
-            toggleLoadingOverlay(false);
-        }
+   // 9) Actually upload to IPFS (after PayPal or if free)
+async function uploadToIPFS() {
+    if (!fileToUpload) {
+        alert('No file is selected. Please select a file first.');
+        return;
     }
+    toggleLoadingOverlay(true);
+    try {
+        const formData = new FormData();
+        formData.append('file', fileToUpload);
+
+        const response = await fetch(
+            'https://polar-stream-23993-43b80ccd3a73.herokuapp.com/upload',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+        if (!response.ok) {
+            throw new Error('Failed to upload file to server.');
+        }
+        const data = await response.json();
+
+        // IPFS Hash (from Pinata)
+        ipfsHash = data.IpfsHash;
+        document.getElementById('hashOutput').innerText = `IPFS Hash: ${ipfsHash}`;
+
+        // *** NEW: Show alert to remind user to save the hash
+        alert(`Please save this IPFS hash to retrieve your document later:\n\n${ipfsHash}`);
+
+        // *** NEW: Auto-fill the Retrieve Title Deed box
+        document.getElementById('retrieveHash').value = ipfsHash;
+
+        // Now do a separate SHA-256 of the file for the contract
+        const arrayBuffer = await fileToUpload.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        hashHex = '0x' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        // Enable the "Register on Blockchain" button
+        document.getElementById('registerButton').disabled = false;
+
+        // Clear out fileToUpload (not strictly necessary)
+        fileToUpload = null;
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        alert('Failed to upload file. Please try again.');
+    } finally {
+        toggleLoadingOverlay(false);
+    }
+}
+
 
     // 4) Register Hash on Blockchain
     async function registerHashOnBlockchain() {
