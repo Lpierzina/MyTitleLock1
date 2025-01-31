@@ -456,6 +456,48 @@
   - <em>Why?</em> Your document is now decentralized and tamper-evident—any change 
     produces a new IPFS hash, revealing any forgery.
 </p>
+  <!-- Insert the SVG graphic below (or anywhere you'd like) -->
+  <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Define arrow marker -->
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L6,3 Z" fill="#1e429f"/>
+      </marker>
+    </defs>
+
+    <!-- Document Icon -->
+    <rect x="160" y="110" width="80" height="100" fill="#1e429f" stroke="#000" stroke-width="2" rx="5" ry="5"/>
+    <!-- Simulate a folded corner -->
+    <polygon points="240,110 240,130 260,110" fill="#fff"/>
+    <text x="175" y="170" fill="#fff" font-size="16" font-family="Roboto">PDF</text>
+  
+    <!-- Arrows from the document to network nodes -->
+    <line x1="200" y1="110" x2="100" y2="40" stroke="#1e429f" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="200" y1="110" x2="300" y2="40" stroke="#1e429f" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="200" y1="210" x2="100" y2="260" stroke="#1e429f" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="200" y1="210" x2="300" y2="260" stroke="#1e429f" stroke-width="2" marker-end="url(#arrow)"/>
+  
+    <!-- Network Nodes (IPFS Nodes) -->
+    <circle cx="100" cy="40" r="20" fill="#f8f8f8" stroke="#1e429f" stroke-width="2"/>
+    <text x="75" y="45" fill="#1e429f" font-size="12" font-family="Roboto">IPFS</text>
+  
+    <circle cx="300" cy="40" r="20" fill="#f8f8f8" stroke="#1e429f" stroke-width="2"/>
+    <text x="275" y="45" fill="#1e429f" font-size="12" font-family="Roboto">IPFS</text>
+  
+    <circle cx="100" cy="260" r="20" fill="#f8f8f8" stroke="#1e429f" stroke-width="2"/>
+    <text x="75" y="265" fill="#1e429f" font-size="12" font-family="Roboto">IPFS</text>
+  
+    <circle cx="300" cy="260" r="20" fill="#f8f8f8" stroke="#1e429f" stroke-width="2"/>
+    <text x="275" y="265" fill="#1e429f" font-size="12" font-family="Roboto">IPFS</text>
+  
+    <!-- Optional: Add a title above the graphic -->
+    <text x="200" y="30" fill="#1e429f" font-size="18" font-family="Roboto" text-anchor="middle">
+      Pin Your Document on IPFS
+    </text>
+  </svg>
+
+
+    
 <p>
   <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
   - Files up to 0.5MB: <strong>Free</strong><br/>
