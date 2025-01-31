@@ -448,7 +448,27 @@
   <!-- Step 2: Pin to IPFS -->
   <div class="ipfs-section">
     <h3>Step 2: Pin Your Document on IPFS</h3>
-    <p> ... (upload & hash instructions) ... </p>
+    <p>
+  <strong>Upload &amp; Hash Document.</strong><br/>
+  - Click “Upload &amp; Hash Document” to pin the file on IPFS.<br/>
+  - <strong>Pinning</strong> means we keep a copy of your file on IPFS indefinitely, 
+    so it’s always available—even if your computer is offline.<br/>
+  - <em>Why?</em> Your document is now decentralized and tamper-evident—any change 
+    produces a new IPFS hash, revealing any forgery.
+</p>
+<p>
+  <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
+  - Files up to 0.5MB: <strong>Free</strong><br/>
+  - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
+  - 5MB &ndash; 20MB: <strong>$10</strong><br/>
+  - 20MB &ndash; 50MB: <strong>$20</strong><br/>
+  - <em>Note:</em> Files over 50MB aren’t allowed. You’ll see a PayPal payment 
+    prompt if your file is above 0.5MB.
+</p>
+<p>
+  <em>Why Pin?</em> Without pinning, your file might be garbage-collected if no node 
+  hosts it. Pinning ensures permanence in the decentralized network.
+</p>
     <!-- The "Upload and Hash Document" button that calls handleFileAndPayment() -->
     <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
     <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
@@ -551,14 +571,22 @@
     <button onclick="retrieveDocument()">Retrieve Document</button>
     <a id="retrievedLink" href="#" target="_blank">Download Document</a>
 
+Step 3: Install & Fund Your Wallet
+Set Up MetaMask or Coinbase Wallet.
+- Download MetaMask (mobile or browser extension) or the Coinbase Wallet app.
+- Securely back up your secret recovery phrase in multiple safe places.
+- Add a small amount of ETH to cover blockchain gas fees (e.g., on Sepolia testnet for demo purposes, or Ethereum mainnet for real-world transactions).
 
+Why? MyTitleLock uses smart contracts on Ethereum. Your wallet address will hold ownership of the on-chain registration for your documents, ensuring only you can record or prove authenticity.
     
   <!-- BLOCKCHAIN SECTION -->
   <div class="blockchain-section">
-    <h3>Register on the Blockchain</h3>
+    <h3>Step 4: Connect to MyTitleLock</h3>
 
     <!-- Example Gwei Meter -->
     <div class="gwei-meter">
+
+      
       <p>Current Gas Price: <span id="gasPriceDisplay">Loading...</span> Gwei</p>
       <div class="meter-bar">
         <div id="meterFill" class="meter-fill"></div>
