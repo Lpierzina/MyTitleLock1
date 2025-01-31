@@ -212,8 +212,10 @@
         from the hash. This ensures that your title deed is both private and secure, 
         while allowing easy verification of its integrity.
     </p>
-  <!-- How to Use MyTitleLock -->
-<div id="howToUseSection" style="margin-top:30px;">
+  <!-- "How to Use" button + hidden 6 steps -->
+  <button onclick="toggleSection('howToUseSection')">How to Use MyTitleLock</button>
+  <div id="howToUseSection" style="display:none; margin-top:30px;">
+    <!-- 6-step instructions from your code -->
   <h2>How to Use MyTitleLock</h2>
 
   <h3>Step 1: Prepare Your Document</h3>
@@ -395,24 +397,40 @@
         </p>
     </div>
 
-    <!-- IPFS SECTION: actual file upload process -->
-    <div class="ipfs-section">
-        <h3>Upload &amp; Hash Your Document (IPFS)</h3>
-        <p>
-            Files over 50MB are not accepted. Below is our Fee Structure:
-        </p>
-        <ul>
-            <li>Up to 0.5MB: FREE</li>
-            <li>0.5MB &ndash; 5MB: $5</li>
-            <li>5MB &ndash; 20MB: $10</li>
-            <li>20MB &ndash; 50MB: $20</li>
-        </ul>
+    <!-- Step 1 Section (File + Maricopa) -->
+  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
+    <h3>Step 1: Prepare Your Document</h3>
+    <p>
+      Choose the PDF you want to protect, and optionally do a Maricopa County APN lookup 
+      if that applies to you.
+    </p>
+    <!-- Choose File input -->
+    <input type="file" id="fileInput" accept=".pdf" />
+    <p id="fileNameOutput"></p>
 
-        <input type="file" id="fileInput" accept=".pdf" />
-        <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
-        <p id="fileNameOutput"></p>
-        <p id="hashOutput"></p>
-    </div>
+    <!-- Maricopa Lookup toggle -->
+    <button onclick="toggleSection('maricopaSection')">
+      Maricopa County Parcel Lookup
+    </button>
+    <p>If you own property in Maricopa, see info below.</p>
+  </div>
+
+  <!-- The hidden maricopaSection -->
+  <div id="maricopaSection" style="display:none;">
+    <h2>Maricopa Parcel Lookup &amp; IPFS Integration</h2>
+    <p> ... existing text ... </p>
+    <!-- your "Lookup a Parcel" input, "download JSON", etc. -->
+  </div>
+
+  <!-- Step 2: Pin to IPFS -->
+  <div class="ipfs-section">
+    <h3>Step 2: Pin Your Document on IPFS</h3>
+    <p> ... (upload & hash instructions) ... </p>
+    <!-- The "Upload and Hash Document" button that calls handleFileAndPayment() -->
+    <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
+    <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
+    <p id="hashOutput"></p>
+  </div>
 
     <!-- PayPal button container (hidden by default) -->
     <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
