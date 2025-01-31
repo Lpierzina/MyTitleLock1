@@ -215,20 +215,58 @@
   <!-- How to Use MyTitleLock -->
 <div id="howToUseSection" style="margin-top:30px;">
   <h2>How to Use MyTitleLock</h2>
+
+  <h3>Step 1: Prepare Your Document</h3>
   <p>
-    MyTitleLock is designed for anyone who wants to protect and verify important documents 
-    or property titles using the power of blockchain and IPFS. Below is a simple workflow:
+    <strong>Gather Your PDF (or other file).</strong><br/>
+    - Choose the file you want to protect (e.g., a property deed).<br/>
+    - Make sure it’s in a supported format (usually PDF).<br/>
+    - Have it ready to upload in the next step.
   </p>
-  <ol>
-    <li><strong>Upload Your Document:</strong> Click the “Upload and Hash Document” button to select your title deed (PDF). We’ll calculate a unique cryptographic hash and, if the file is under 0.5MB, store it on IPFS for free. Larger files may require a small fee.</li>
-    <li><strong>Register on Blockchain:</strong> If you choose, you can connect your wallet (e.g., MetaMask) to record the file’s hash on the blockchain for tamper-proof authenticity.</li>
-    <li><strong>Retrieve or Verify Later:</strong> Any time you need to prove authenticity, you (or others) can fetch the same file, re-hash it, and compare it against the recorded blockchain hash. If they match, the file is confirmed original.</li>
-  </ol>
+
+  <h3>Step 2: Pin Your Document on IPFS</h3>
   <p>
-    Once your title or document is registered, you can rest easy knowing there's a permanent, decentralized record of its existence 
-    and integrity. 
+    <strong>Upload &amp; Hash Document.</strong><br/>
+    - Click “Upload &amp; Hash Document” to pin the file on IPFS.<br/>
+    - Pinning distributes the file across multiple nodes, keeping it always accessible.<br/>
+    - <em>Why?</em> Your document is now decentralized and tamper-evident—any alteration changes its unique hash.
+  </p>
+
+  <h3>Step 3: Install & Fund MetaMask</h3>
+  <p>
+    <strong>Set Up Your Wallet.</strong><br/>
+    - Download MetaMask (mobile or browser extension).<br/>
+    - Securely back up your secret recovery phrase.<br/>
+    - Add a small amount of ETH to cover blockchain gas fees 
+      (e.g., on Sepolia for testing or mainnet for real transactions).
+  </p>
+
+  <h3>Step 4: Connect to MyTitleLock</h3>
+  <p>
+    <strong>Connect Your Wallet to the dApp.</strong><br/>
+    - Open MyTitleLock and click “Connect Wallet.”<br/>
+    - Approve in MetaMask to allow the dApp to interact with your address.<br/>
+    - <em>Why?</em> This lets you register your IPFS hash on the Ethereum blockchain under your control.
+  </p>
+
+  <h3>Step 5: Register the Document Hash on Ethereum</h3>
+  <p>
+    <strong>Record on the Blockchain.</strong><br/>
+    - Pay the required gas fee to store your document’s hash on-chain.<br/>
+    - A tamper-proof record is created—any attempt to modify the file changes its IPFS hash, 
+      invalidating the on-chain record.<br/>
+    - <em>Why?</em> This ensures a permanent, unalterable proof of authenticity.
+  </p>
+
+  <h3>Step 6: Save Your Transaction Receipt &amp; IPFS Hash</h3>
+  <p>
+    <strong>Keep Your Receipt &amp; Hash Safe.</strong><br/>
+    - You’ll get a transaction receipt with a unique transaction hash.<br/>
+    - Store it in a safe place. It proves exactly when your file was pinned and recorded on-chain.<br/>
+    - If you or anyone needs to verify authenticity later, just compare the file’s hash to the one on Ethereum.
   </p>
 </div>
+
 
     <!-- Buttons to show/hide the hidden sections -->
     <div class="toggle-buttons">
