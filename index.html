@@ -581,7 +581,7 @@ Why? MyTitleLock uses smart contracts on Ethereum. Your wallet address will hold
     
   <!-- BLOCKCHAIN SECTION -->
   <div class="blockchain-section">
-    <h3>Step 4: Connect to MyTitleLock</h3>
+    <h3>Step 4: Connect your Wallet</h3>
 
     <!-- Example Gwei Meter -->
     <div class="gwei-meter">
@@ -610,6 +610,18 @@ Why? MyTitleLock uses smart contracts on Ethereum. Your wallet address will hold
     <button onclick="disconnectWallet()">Disconnect Wallet</button>
     <p id="walletAddress">Not connected</p>
 
+    <!-- Step 5: Register on Blockchain -->
+  <div class="blockchain-section">
+    <h3>Register on the Blockchain</h3>
+
+    <!-- Step 5: Register the Document Hash on Ethereum -->
+    <h3>Step 5: Register the Document Hash on Ethereum</h3>
+    <p>
+      <strong>Record Your Document Hash on the Blockchain.</strong><br/>
+      - After uploading and hashing your document on IPFS, click the “Register on Blockchain” button below.<br/>
+      - This action will store your document's hash on the Ethereum blockchain, creating an immutable record.<br/>
+      - <em>Why?</em> Registering on the blockchain ensures that your document's authenticity can be verified at any time.
+    </p>
     <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>
       Register on Blockchain
     </button>
@@ -624,6 +636,17 @@ Why? MyTitleLock uses smart contracts on Ethereum. Your wallet address will hold
       </p>
     </div>
   </div>
+<!-- Step 6: Save Your Transaction Receipt & IPFS Hash -->
+  <div style="margin-top:30px;">
+    <h3>Step 6: Save Your Transaction Receipt &amp; IPFS Hash</h3>
+    <p>
+      <strong>Keep Your Receipt &amp; Hash Safe.</strong><br/>
+      - You’ll get a transaction receipt with a unique transaction hash.<br/>
+      - Store it in a safe place. It proves exactly when your file was pinned and recorded on-chain.<br/>
+      - If you or anyone needs to verify authenticity later, just compare the file’s hash to the one on Ethereum.
+    </p>
+  </div>
+    
     <h3>Verify Title Deed</h3>
     <button onclick="verifyDocument()">Verify Document</button>
 
