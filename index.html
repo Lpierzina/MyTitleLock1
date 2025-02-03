@@ -114,6 +114,7 @@
     }
 
   .ipfs-section {
+  height: 200px; /* Set fixed height */
   margin-top: 30px;
   padding: 20px;
   background-image: url('https://raw.githubusercontent.com/Lpierzina/MyTitleLock1/main/ISFFDOC%20(1).jpg');
@@ -504,6 +505,8 @@
   </div>
 
   <!-- Step 2: Pin to IPFS -->
+	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
+
 <h3>Step 2: Pin Your Document on IPFS</h3>
 <p>
   <strong>Upload &amp; Hash Document.</strong><br/>
@@ -516,6 +519,7 @@
 
 <!-- Background image section -->
 <div class="ipfs-section">
+	</div>
   <p>
     <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
     - Files up to 0.5MB: <strong>Free</strong><br/>
@@ -533,7 +537,7 @@
   <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
   <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
   <p id="hashOutput"></p>
-</div>
+
 
 
     <!-- PayPal button container (hidden by default) -->
@@ -631,8 +635,11 @@
     <input type="text" id="retrieveHash" placeholder="Enter IPFS Hash" />
     <button onclick="retrieveDocument()">Retrieve Document</button>
     <a id="retrievedLink" href="#" target="_blank">Download Document</a>
-
+</div>
+		
+		
 <!-- Step 3: Install & Fund Your Wallet -->
+	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
     <div class="wallet-section">
       <h3>Step 3: Install &amp; Fund Your Wallet</h3>
       <p>
@@ -647,8 +654,11 @@
         ensuring only <strong>you</strong> can record or prove authenticity.
       </p>
     </div>
+		</div>
     
   <!-- BLOCKCHAIN SECTION -->
+	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
+
   <div class="blockchain-section">
     <h3>Step 4: Connect your Wallet</h3>
 
@@ -678,11 +688,15 @@
     <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
     <button onclick="disconnectWallet()">Disconnect Wallet</button>
     <p id="walletAddress">Not connected</p>
+	  </div>
+		</div>
 
     <!-- Step 5: Register on Blockchain -->
+  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
+
   <div class="blockchain-section">
     <h3>Register on the Blockchain</h3>
-
+	  </div>
     <!-- Step 5: Register the Document Hash on Ethereum -->
     <h3>Step 5: Register the Document Hash on Ethereum</h3>
     <p>
@@ -706,6 +720,8 @@
     </div>
   </div>
 <!-- Step 6: Save Your Transaction Receipt & IPFS Hash -->
+	  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
+
   <div style="margin-top:30px;">
     <h3>Step 6: Save Your Transaction Receipt &amp; IPFS Hash</h3>
     <p>
@@ -720,6 +736,7 @@
     <button onclick="verifyDocument()">Verify Document</button>
 
  </div>
+	 
 
 <!-- Spinner Overlay -->
 <div id="loadingOverlay">
