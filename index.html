@@ -117,6 +117,7 @@
   border-radius: 5px;
   color: white; /* Ensures text is readable */
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Adds depth to text */
+       user-select: text !important;
 }
 
 /* Add a semi-transparent overlay */
@@ -130,6 +131,7 @@
   background: rgba(0, 0, 0, 0.4); /* Black overlay with 50% opacity */
   z-index: 0; /* Ensure it stays behind text */
   border-radius: 5px; /* Match border radius */
+   pointer-events: none; /* Ensure the overlay does not block interaction */
 }
 
 /* Ensure text stays above the overlay */
