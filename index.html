@@ -128,7 +128,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* Black overlay with 50% opacity */
+  background: rgba(0, 0, 0, 0.2) !important; /* Lighter overlay */
   z-index: 0; /* Ensure it stays behind text */
   border-radius: 5px; /* Match border radius */
    pointer-events: none; /* Ensure the overlay does not block interaction */
@@ -141,6 +141,9 @@
 }
 .ipfs-section p{
   font-size: 1.2em; /* Increase the text size slightly */
+  color: #ffffff !important;  /* Ensures text stays white */
+  font-weight: bold;          /* Makes text more readable */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); /* Adds a black outline */
 }
 .ipfs-section button {
   position: relative;
