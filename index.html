@@ -49,13 +49,19 @@
       color: #1e429f;
     }
     button {
-      background-color: #1e429f;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+	  background-color: #1e429f;
+	  color: white;
+	  padding: 12px 20px;  /* Slightly increased padding */
+	  border: none;
+	  border-radius: 5px;
+	  cursor: pointer;
+	  font-weight: bold;
+	  margin-top: 15px;  /* Increased space above the button */
+	  margin-bottom: 15px;  /* Increased space below the button */
+	  display: block; /* Ensures buttons are on separate lines */
+	  width: fit-content; /* Prevents buttons from stretching */
+	}
+
     button:disabled {
       background-color: #ccc;
       cursor: not-allowed;
@@ -119,6 +125,7 @@
   color: white;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   z-index: 1;
+	   // background: rgba(0, 0, 0, 0.15) !important; /* Reduce overlay darkness */
 }
 
 
@@ -130,7 +137,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.15) !important; /* Reduce overlay darkness */
+ 
   z-index: 0;
   border-radius: 5px;
   pointer-events: none;
@@ -497,9 +504,8 @@
   </div>
 
   <!-- Step 2: Pin to IPFS -->
-  <div class="ipfs-section">
-    <h3>Step 2: Pin Your Document on IPFS</h3>
-    <p>
+<h3>Step 2: Pin Your Document on IPFS</h3>
+<p>
   <strong>Upload &amp; Hash Document.</strong><br/>
   - Click “Upload &amp; Hash Document” to pin the file on IPFS.<br/>
   - <strong>Pinning</strong> means we keep a copy of your file on IPFS indefinitely, 
@@ -507,25 +513,28 @@
   - <em>Why?</em> Your document is now decentralized and tamper-evident—any change 
     produces a new IPFS hash, revealing any forgery.
 </p>
-     
-<p>
-  <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
-  - Files up to 0.5MB: <strong>Free</strong><br/>
-  - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
-  - 5MB &ndash; 20MB: <strong>$10</strong><br/>
-  - 20MB &ndash; 50MB: <strong>$20</strong><br/>
-  - <em>Note:</em> Files over 50MB aren’t allowed. You’ll see a PayPal payment 
-    prompt if your file is above 0.5MB.
-</p>
-<p>
-  <em>Why Pin?</em> Without pinning, your file might be garbage-collected if no node 
-  hosts it. Pinning ensures permanence in the decentralized network.
-</p>
-    <!-- The "Upload and Hash Document" button that calls handleFileAndPayment() -->
-    <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
-    <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
-    <p id="hashOutput"></p>
-  </div>
+
+<!-- Background image section -->
+<div class="ipfs-section">
+  <p>
+    <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
+    - Files up to 0.5MB: <strong>Free</strong><br/>
+    - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
+    - 5MB &ndash; 20MB: <strong>$10</strong><br/>
+    - 20MB &ndash; 50MB: <strong>$20</strong><br/>
+    - <em>Note:</em> Files over 50MB aren’t allowed. You’ll see a PayPal payment 
+      prompt if your file is above 0.5MB.
+  </p>
+  <p>
+    <em>Why Pin?</em> Without pinning, your file might be garbage-collected if no node 
+    hosts it. Pinning ensures permanence in the decentralized network.
+  </p>
+  <!-- The "Upload and Hash Document" button -->
+  <button id="uploadBtn" onclick="handleFileAndPayment()">Upload and Hash Document</button>
+  <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
+  <p id="hashOutput"></p>
+</div>
+
 
     <!-- PayPal button container (hidden by default) -->
     <div id="paypal-button-container" style="display:none; margin-bottom:20px;"></div>
