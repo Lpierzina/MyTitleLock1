@@ -176,14 +176,27 @@
 }
 	  
 .step-image-section {
-  width: 100%;
-  height: 250px; /* Fixed height */
-  background-image: url('https://raw.githubusercontent.com/Lpierzina/MyTitleLock1/main/Comp%2021.jpg');
-  background-position: center center;
-  background-size: 70%; /* Zoom in by 100% */
-  background-repeat: no-repeat;
+    height: 200px; /* Fixed height */
+    margin-top: 20px; /* Adds spacing above */
+    background-image: url('https://raw.githubusercontent.com/Lpierzina/MyTitleLock1/main/Comp%2021.jpg'); /* Replace with correct image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    position: relative;
 }
 
+/* Optional: Add an overlay effect for better visibility */
+.step-image-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Slight dark overlay */
+    border-radius: 5px;
+}
 
 .step-image-section img {
   width: auto;
@@ -191,14 +204,30 @@
   object-fit: cover;
 }
 	  
-	  .step-image-section2 {
-  width: 100%;
-  height: 300px;
+	.wallet-background-section {
+    height: 600px; /* Fixed height */
+    margin-top: 20px; /* Adds spacing above */
+    margin-bottom: 20px; /* Adds spacing below */
   background-image: url('https://raw.githubusercontent.com/Lpierzina/MyTitleLock1/main/Comp%2060-3.jpg');
-  background-position: center;
-  background-size: 30%; /* Zoom in by 150% */
-  background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    position: relative;
 }
+
+/* Optional: Add an overlay effect */
+.wallet-background-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Slight dark overlay */
+    border-radius: 5px;
+}
+
 	  .shade-box {
   background: #e0e0e0; /* Darker gray for better contrast */
   padding: 15px;
@@ -673,24 +702,30 @@
 		
 		
 <!-- Step 3: Install & Fund Your Wallet -->
-	<div class="shade-box">
-<div class="wallet-section">
-      <h3>Step 3: Install &amp; Fund Your Wallet</h3>
-      <p>
-        <strong>Set Up MetaMask or Coinbase Wallet.</strong><br/>
-        - Download MetaMask (mobile or browser extension) or the Coinbase Wallet app.<br/>
-        - Securely back up your secret recovery phrase in multiple safe places.<br/>
-        - Add a small amount of ETH to cover blockchain gas fees (e.g., on Sepolia testnet for demo purposes, or Ethereum mainnet for real-world transactions).
-      </p>
-      <p>
-        <em>Why?</em> MyTitleLock uses smart contracts on Ethereum. Your wallet address will 
-        hold ownership of the on-chain registration for your documents, 
-        ensuring only <strong>you</strong> can record or prove authenticity.
-      </p>
+<div class="shade-box">
+    <div class="wallet-section">
+        <h3>Step 3: Install &amp; Fund Your Wallet</h3>
+        
+        <p>
+            <strong>Set Up MetaMask or Coinbase Wallet.</strong><br/>
+            - Download MetaMask (mobile or browser extension) or the Coinbase Wallet app.<br/>
+            - Securely back up your secret recovery phrase in multiple safe places.<br/>
+            - Add a small amount of ETH to cover blockchain gas fees (e.g., on Sepolia testnet for demo purposes, or Ethereum mainnet for real-world transactions).
+        </p>
+
+        <!-- ✅ Background Image Section (Between Paragraphs) -->
+        <div class="wallet-background-section"></div>
+
+        <p>
+            <em>Why?</em> MyTitleLock uses smart contracts on Ethereum. Your wallet address will 
+            hold ownership of the on-chain registration for your documents, 
+            ensuring only <strong>you</strong> can record or prove authenticity.
+        </p>
+
     </div>
-		</div>
-	<div class="step-image-section2">
-    </div>
+</div>
+
+	
 
     
   <!-- BLOCKCHAIN SECTION -->
@@ -732,6 +767,8 @@
 <div class="blockchain-section">
     <h3>Register on the Blockchain</h3>
 	  </div>
+	  
+	  
     <!-- Step 5: Register the Document Hash on Ethereum -->
     <h3>Step 5: Register the Document Hash on Ethereum</h3>
     <p>
@@ -751,14 +788,15 @@
       <p style="color:red; margin-top:15px;">
           <strong>IMPORTANT:</strong> Save or print this receipt!
           You will need this information and/or the QR code to verify or retrieve your document in the future.
-      </p>
+      </p>	
+		<!-- Inserted Image Section -->
+<div class="step-image-section">
+  </div>
     </div>
   </div>
 	
 	
-	<!-- Inserted Image Section -->
-<div class="step-image-section">
-  </div>
+
 	
 	
 <!-- Step 6: Save Your Transaction Receipt & IPFS Hash -->
