@@ -189,12 +189,25 @@
   width: auto;
   height: 100%;
   object-fit: cover;
-transition: transform 0.3s ease-in-out;
+}
+	  
+	  .step-image-section2 {
+  width: 100%;
+  height: 300px;
+  background-image: url('https://raw.githubusercontent.com/Lpierzina/MyTitleLock1/main/Comp%2060-3.jpg');
+  background-position: center;
+  background-size: 30%; /* Zoom in by 150% */
+  background-repeat: no-repeat;
+}
+	  .shade-box {
+  background: #e0e0e0; /* Darker gray for better contrast */
+  padding: 15px;
+  margin-top: 30px;
+  border-radius: 5px;
+  border: 1px solid #b0b0b0; /* Adds a subtle border */
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow effect */
 }
 
-  .step-image-section:hover img {
-  transform: scale(1.8); /* 80% zoom on hover */
-}
 
 
 
@@ -502,8 +515,8 @@ transition: transform 0.3s ease-in-out;
     </div>
 
     <!-- Step 1 Section (File + Maricopa) -->
-  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-    <h3>Step 1: Prepare Your Document</h3>
+  <div class="shade-box">
+<h3>Step 1: Prepare Your Document</h3>
     <p>
       Choose the PDF you want to protect, and optionally do a Maricopa County APN lookup 
       if that applies to you.
@@ -527,8 +540,7 @@ transition: transform 0.3s ease-in-out;
   </div>
 
   <!-- Step 2: Pin to IPFS -->
-	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-
+	<div class="shade-box">
 <h3>Step 2: Pin Your Document on IPFS</h3>
 <p>
   <strong>Upload &amp; Hash Document.</strong><br/>
@@ -661,8 +673,8 @@ transition: transform 0.3s ease-in-out;
 		
 		
 <!-- Step 3: Install & Fund Your Wallet -->
-	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-    <div class="wallet-section">
+	<div class="shade-box">
+<div class="wallet-section">
       <h3>Step 3: Install &amp; Fund Your Wallet</h3>
       <p>
         <strong>Set Up MetaMask or Coinbase Wallet.</strong><br/>
@@ -677,11 +689,13 @@ transition: transform 0.3s ease-in-out;
       </p>
     </div>
 		</div>
+	<div class="step-image-section2">
+    </div>
+
     
   <!-- BLOCKCHAIN SECTION -->
-	<div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-
-  <div class="blockchain-section">
+	<div class="shade-box">
+<div class="blockchain-section">
     <h3>Step 4: Connect your Wallet</h3>
 
     <!-- Example Gwei Meter -->
@@ -714,9 +728,8 @@ transition: transform 0.3s ease-in-out;
 		</div>
 
     <!-- Step 5: Register on Blockchain -->
-  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-
-  <div class="blockchain-section">
+  <div class="shade-box">
+<div class="blockchain-section">
     <h3>Register on the Blockchain</h3>
 	  </div>
     <!-- Step 5: Register the Document Hash on Ethereum -->
@@ -749,9 +762,8 @@ transition: transform 0.3s ease-in-out;
 	
 	
 <!-- Step 6: Save Your Transaction Receipt & IPFS Hash -->
-	  <div style="background:#f8f8f8; padding:15px; margin-top:30px; border-radius:5px;">
-
-  <div style="margin-top:30px;">
+	  <div class="shade-box">
+<div style="margin-top:30px;">
     <h3>Step 6: Save Your Transaction Receipt &amp; IPFS Hash</h3>
     <p>
       <strong>Keep Your Receipt &amp; Hash Safe.</strong><br/>
