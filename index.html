@@ -5,7 +5,7 @@
   <!-- Viewport for mobile scaling -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MyTitleLock - Lock Down Your Title</title>
+  <title>MyLockChain - Lock Down Your Title</title>
 
   <!-- Include Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
@@ -318,28 +318,34 @@
 
 <body>
 <div class="navbar">
-    <h1>MyTitleLock - Lock Down Your Title</h1>
+    <h1>MyLockChain - Lock Down Your Title</h1>
 </div>
 
 <div class="container">
 
     <!-- Intro / Summary -->
-    <h2>Welcome to MyTitleLock</h2>
+    <h2>Welcome to MyLockChain</h2>
+	
+	
     <p>
-        Manage and verify title deeds securely using blockchain and IPFS technology. 
-        By uploading a title deed, we generate a unique "hash" for the document, 
+      Manage and verify title deeds and important documents securely using blockchain and IPFS technology. 
+        By uploading a title deed or any PDF document, we generate a unique "hash" for the document, 
         which acts like a digital fingerprint. This hash is stored securely on the 
         blockchain, ensuring tamper-proof authenticity. The hashing process is a 
         one-way mathematical function that converts your document into a fixed 
         string of characters, making it impossible to recreate the original document 
-        from the hash. This ensures that your title deed is both private and secure, 
-        while allowing easy verification of its integrity.
-    </p>
+        from the hash. This ensures that your document is both private and secure, 
+      while allowing easy verification of its integrity.</p>
+	
+	<p>
+    **No technical skills required** – Just upload your document, let MyLockChain handle the security, and relax knowing your records are safe and verifiable anytime. Walk through the 6 easy steps below.
+</p>
+	
   <!-- "How to Use" button + hidden 6 steps -->
-  <button onclick="toggleSection('howToUseSection')">How to Use MyTitleLock</button>
+  <button onclick="toggleSection('howToUseSection')">How to Use MyLockChain</button>
   <div id="howToUseSection" style="display:none; margin-top:30px;">
     <!-- 6-step instructions from your code -->
-  <h2>How to Use MyTitleLock</h2>
+  <h2>How to Use MyLockChain</h2>
 
   <h3>Step 1: Prepare Your Document</h3> 
   <p>
@@ -383,16 +389,16 @@
     real-world transactions).
 </p>
 <p>
-  <em>Why?</em> MyTitleLock uses smart contracts on Ethereum. Your wallet address will 
+  <em>Why?</em> MyLockChain uses smart contracts on Ethereum. Your wallet address will 
   hold ownership of the on-chain registration for your documents, 
   ensuring only <strong>you</strong> can record or prove authenticity.
 </p>
 
 
-  <h3>Step 4: Connect to MyTitleLock</h3>
+  <h3>Step 4: Connect to MyLockChain</h3>
   <p>
     <strong>Connect Your Wallet to the dApp.</strong><br/>
-    - Open MyTitleLock and click “Connect Wallet.”<br/>
+    - Open MyLockChain and click “Connect Wallet.”<br/>
     - Approve in MetaMask to allow the dApp to interact with your address.<br/>
     - <em>Why?</em> This lets you register your IPFS hash on the Ethereum blockchain under your control.
   </p>
@@ -418,13 +424,13 @@
 
     <!-- Buttons to show/hide the hidden sections -->
     <div class="toggle-buttons">
-        <button onclick="toggleSection('whyStoreSection')">Why Store Documents on MyTitleLock?</button>
+        <button onclick="toggleSection('whyStoreSection')">Why Store Documents on MyLockChain?</button>
         <button onclick="toggleSection('ipfsIntroSection')">Introducing IPFS</button>
     </div>
 
     <!-- Collapsible Section 1: Why Store Documents? -->
     <div id="whyStoreSection" class="hidden-section">
-        <h3>Why Store Documents on MyTitleLock?</h3>
+        <h3>Why Store Documents on MyLockChain?</h3>
         <h4>Prevent Tampering &amp; Fraud</h4>
         <p>
             By hashing your file and storing that hash on the blockchain, you create 
@@ -463,11 +469,11 @@
         </p>
         <h4>Easy Setup with Your Wallet</h4>
         <p>
-            MyTitleLock integrates directly with MetaMask or Coinbase Wallet. One click 
+            MyLockChain integrates directly with MetaMask or Coinbase Wallet. One click 
             connects your wallet, and a small ETH fee registers your file’s hash on the 
             blockchain. It’s as simple as uploading your document and clicking 
             “Register on Blockchain.”
-        </p>
+      </p>
         <h4>How It All Works</h4>
         <p>
             <strong>Upload Document</strong> &rarr; We generate a unique hash using a 
@@ -479,11 +485,11 @@
         </p>
         <h4>Start Protecting Your Documents Now</h4>
         <p>
-            With MyTitleLock, your documents are safer, always retrievable, and legally verifiable. 
+            With MyLockChain, your documents are safer, always retrievable, and legally verifiable. 
             Why trust a single server or paper record when you can harness the power of decentralization? 
             Upload today, and experience peace of mind knowing your titles, deeds, or critical records 
             are truly locked down.
-        </p>
+      </p>
     </div>
 
     <!-- Collapsible Section 2: Introducing IPFS -->
@@ -506,10 +512,10 @@
         </ul>
         <h4>Try It for Free (Up to 0.5MB)</h4>
         <p>
-            MyTitleLock allows free uploads for files under 0.5MB. Upload a small document, 
+            MyLockChain allows free uploads for files under 0.5MB. Upload a small document, 
             see how the hash and IPFS storage work, and experience the benefits of decentralized 
             storage—all at no charge!
-        </p>
+      </p>
         <h4>Secure Registration with Blockchain &amp; PayPal</h4>
         <p>
             <strong>Blockchain Registration:</strong> We store your document’s unique hash on the blockchain 
@@ -528,7 +534,7 @@
             <li><strong>Verify:</strong> Anyone can re-hash the file and compare it to the on-chain record. If they match,
                 the file is authentic.</li>
         </ol>
-        <h4>Why Trust MyTitleLock?</h4>
+        <h4>Why Trust MyLockChain?</h4>
         <ul>
             <li><strong>User-Friendly:</strong> We handle the hashing and registration. No deep blockchain knowledge needed.</li>
             <li><strong>Affordable:</strong> Pay only for the exact storage you need. Under 0.5MB is free!</li>
@@ -553,13 +559,13 @@
     <!-- Choose File input -->
     <input type="file" id="fileInput" accept=".pdf" />
     <p id="fileNameOutput"></p>
-
+<p>If you own property in Maricopa, see info below.</p>
     <!-- Maricopa Lookup toggle -->
     <button onclick="toggleSection('maricopaSection')">
       Maricopa County Parcel Lookup
     </button>
-    <p>If you own property in Maricopa, see info below.</p>
-  </div>
+    
+</div>
 
   <!-- The hidden maricopaSection -->
   <div id="maricopaSection" style="display:none;">
@@ -614,7 +620,7 @@
   
   <h2>Maricopa Parcel Lookup &amp; IPFS Integration</h2>
     <p>
-  While MyTitleLock is a worldwide platform for securing title deeds, we also offer a direct integration 
+  While MyLockChain is a worldwide platform for securing title deeds, we also offer a direct integration 
   with the Maricopa County Assessor's system in Arizona, USA. If you own property in Maricopa County, 
   you can enter your APN to retrieve detailed assessor records on your parcel—complete with valuations, 
   sketches, and official county document links. 
@@ -630,7 +636,7 @@
 </p>
 <p>
   <em>Note:</em> If you do not have a Maricopa County APN, the direct lookup below will not apply. 
-  However, you can still use MyTitleLock to securely store and verify deeds from anywhere in the world, 
+  However, you can still use MyLockChain to securely store and verify deeds from anywhere in the world, 
   just without the Maricopa integration.
 </p>
     <input type="text" id="apnInput" placeholder="e.g. 123-45-678" />
@@ -717,7 +723,7 @@
         <div class="wallet-background-section"></div>
 
         <p>
-            <em>Why?</em> MyTitleLock uses smart contracts on Ethereum. Your wallet address will 
+            <em>Why?</em> MyLockChain uses smart contracts on Ethereum. Your wallet address will 
             hold ownership of the on-chain registration for your documents, 
             ensuring only <strong>you</strong> can record or prove authenticity.
         </p>
@@ -832,7 +838,7 @@
 
 
 <div class="footer">
-    &copy; 2023 MyTitleLock. All Rights Reserved.
+    &copy; 2024 MyLockChain. All Rights Reserved.
 </div>
 
 <script>
