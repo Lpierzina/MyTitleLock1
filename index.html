@@ -567,12 +567,88 @@
     
 </div>
 
-  <!-- The hidden maricopaSection -->
-  <div id="maricopaSection" style="display:none;">
-    <h2>Maricopa Parcel Lookup &amp; IPFS Integration</h2>
-    <p> ... existing text ... </p>
-    <!-- your "Lookup a Parcel" input, "download JSON", etc. -->
+  <!-- This entire block is hidden by default -->
+<div id="maricopaSection" style="display:none;">
+  <h2>Maricopa Parcel Lookup & IPFS Integration</h2>
+  <p>
+    While MyLockChain is a worldwide platform for securing title deeds, we also offer a direct integration 
+    with the Maricopa County Assessor's system in Arizona, USA. If you own property in Maricopa County, 
+    you can enter your APN to retrieve detailed assessor records on your parcel—complete with valuations, 
+    sketches, and official county document links.
+  </p>
+
+  <!-- 1) APN Lookup -->
+  <div>
+    <h3>Lookup a Parcel (APN)</h3>
+    <p>
+      <strong>What Is an APN?</strong> An APN (Assessor’s Parcel Number) is a unique code assigned by 
+      the county assessor to identify each property. You can usually find your APN on your property tax 
+      statement, deed paperwork, or online assessor records.
+    </p>
+    <p>
+      <em>Note:</em> If you do not have a Maricopa County APN, the direct lookup below will not apply. 
+      However, you can still use MyLockChain to securely store and verify deeds from anywhere in the world, 
+      just without the Maricopa integration.
+    </p>
+
+    <input type="text" id="apnInput" placeholder="e.g. 123-45-678" />
+    <button onclick="lookupParcel()">Lookup Parcel</button>
+    <div id="parcelActions" style="margin-top:10px; display:none;">
+      <button onclick="downloadParcelJSON()">Download JSON</button>
+      <button onclick="uploadParcelJSON()">Upload to IPFS</button>
+    </div>
+    <pre id="parcelResult"></pre>
+
+    <!-- Owner & Deed Info -->
+    <div id="ownerSection" style="display:none; margin-top:20px;">
+      <h3>Owner Details</h3>
+      <p><strong>Owner Name:</strong> <span id="ownerName"></span></p>
+      <p><strong>Deed Date:</strong> <span id="ownerDeedDate"></span></p>
+      <p><strong>Sale Price:</strong> <span id="ownerSalePrice"></span></p>
+      <p><strong>Sale Date:</strong> <span id="ownerSaleDate"></span></p>
+      <p>
+        <strong>View Deed:</strong>
+        <a id="viewDeedLink" href="#" target="_blank">Open Maricopa Recorder</a>
+      </p>
+    </div>
+
+    <!-- Official County Links -->
+    <div id="countyLinksSection" style="display:none; margin-top:20px;">
+      <h3>Official County Links</h3>
+      <p>
+        <a id="mcrLink" href="#" target="_blank">Subdivision Map (MCR)</a> |
+        <a id="treasurerLink" href="#" target="_blank">Treasurer Tax Info</a>
+      </p>
+    </div>
+
+    <!-- Valuation Table or Chart -->
+    <div id="valuationSection" style="display:none; margin-top:20px;">
+      <h3>Valuations Over Time</h3>
+      <canvas id="valuationChart" width="400" height="200"></canvas>
+      <table id="valuationTable" border="1" cellpadding="5" style="border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Tax Year</th>
+            <th>Full Cash Value</th>
+            <th>Limited Property Value</th>
+            <th>Legal Classification</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Sketch Image -->
+    <div id="sketchSection" style="display:none; margin-top:20px;">
+      <h3>Parcel Sketch</h3>
+      <img id="sketchImage" alt="Parcel Sketch" style="max-width:400px; border:1px solid #ccc;" />
+    </div>
+
+    <!-- Display the IPFS Hash after uploading -->
+    <div id="parcelIpfsHash" style="color:#1e429f; margin-top:10px;"></div>
   </div>
+</div>
+
 
   <!-- Step 2: Pin to IPFS -->
 	<div class="shade-box">
