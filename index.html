@@ -1687,6 +1687,10 @@ async function uploadToIPFS() {
 
         // Enable the "Register on Blockchain" button
         document.getElementById('registerButton').disabled = false;
+		
+		 // *** NEW: Display the selected file's name in the file summary element
+        document.getElementById('fileSummary').innerText = "File to be registered: " + lastUploadedFileName;
+
 
         // Clear out fileToUpload (not strictly necessary)
         fileToUpload = null;
