@@ -384,9 +384,7 @@
   <strong>Set Up MetaMask or Coinbase Wallet.</strong><br/>
   - Download MetaMask (mobile or browser extension) or the Coinbase Wallet app.<br/>
   - Securely back up your secret recovery phrase in multiple safe places.<br/>
-  - Add a small amount of ETH to cover blockchain gas fees (e.g., on 
-    <strong>Sepolia</strong> testnet for demo purposes, or Ethereum mainnet for 
-    real-world transactions).
+  - Add a small amount of ETH to cover blockchain gas fees on the Ethereum mainnet.
 </p>
 <p>
   <em>Why?</em> MyLockChain uses smart contracts on Ethereum. Your wallet address will 
@@ -420,6 +418,7 @@
     - If you or anyone needs to verify authenticity later, just compare the file’s hash to the one on Ethereum.
   </p>
 </div>
+	
 
 
     <!-- Buttons to show/hide the hidden sections -->
@@ -551,6 +550,7 @@
 
     <!-- Step 1 Section (File + Maricopa) -->
   <div class="shade-box">
+
 <h3>Step 1: Prepare Your Document</h3>
     <p>
       Choose the PDF you want to protect, and optionally do a Maricopa County APN lookup 
@@ -792,7 +792,7 @@
             <strong>Set Up MetaMask or Coinbase Wallet.</strong><br/>
             - Download MetaMask (mobile or browser extension) or the Coinbase Wallet app.<br/>
             - Securely back up your secret recovery phrase in multiple safe places.<br/>
-            - Add a small amount of ETH to cover blockchain gas fees (e.g., on Sepolia testnet for demo purposes, or Ethereum mainnet for real-world transactions).
+            - Add a small amount of ETH to cover blockchain gas fees for the Ethereum mainnet.
         </p>
 
         <!-- ✅ Background Image Section (Between Paragraphs) -->
@@ -859,7 +859,9 @@
       - This action will store your document's hash on the Ethereum blockchain, creating an immutable record.<br/>
       - <em>Why?</em> Registering on the blockchain ensures that your document's authenticity can be verified at any time.
     </p>
-    <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>Register on Blockchain</button>
+    <button id="registerButton" onclick="registerHashOnBlockchain()" disabled>
+      Register on Blockchain
+    </button>
 
     <div id="receipt">
       <h3>Transaction Receipt</h3>
@@ -1726,7 +1728,7 @@ async function uploadToIPFS() {
             <strong>Registered By:</strong> ${account}<br>
             <strong>Date and Time:</strong> ${dateTime}<br>
             <strong>Transaction Hash:</strong>
-            <a href="https://sepolia.etherscan.io/tx/${transactionHash}" target="_blank">
+            <a href="https://etherscan.io/tx/${transactionHash}" target="_blank">
                 ${transactionHash}
             </a>
         `;
@@ -1783,34 +1785,24 @@ async function uploadToIPFS() {
         fileInput.click();
     }
 
-    // 7) Check Network (Sepolia)
-    async function checkNetwork() {
-        const chainId = await web3.eth.getChainId();
-        if (chainId !== 11155111) { // Sepolia
-            try {
-                await selectedProvider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0xaa36a7' }] // 11155111 in hex
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    alert('Please add the Sepolia network to your wallet.');
-                } else {
-                    console.error('Error switching network:', switchError);
-                }
+   // Check Network (Ethereum Mainnet)
+async function checkNetwork() {
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 1) { // Ethereum Mainnet
+        try {
+            await selectedProvider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x1' }] // 1 in hex
+            });
+        } catch (switchError) {
+            if (switchError.code === 4902) {
+                alert('Please add the Ethereum Mainnet to your wallet.');
+            } else {
+                console.error('Error switching network:', switchError);
             }
         }
     }
-
-    // 8) React to account & chain changes
-    if (window.ethereum) {
-        window.ethereum.on('accountsChanged', function (accounts) {
-            window.location.reload();
-        });
-        window.ethereum.on('chainChanged', function (chainId) {
-            window.location.reload();
-        });
-    }
+}
 
     // 10) Retrieve from IPFS (no change)
     async function retrieveDocument() {
