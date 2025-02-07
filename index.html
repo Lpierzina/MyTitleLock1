@@ -66,12 +66,32 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
-    input[type="file"], input[type="text"] {
-      margin: 20px 0;
-      padding: 10px;
-      width: calc(100% - 22px);
-      box-sizing: border-box;
-    }
+    /* Separate styling for text inputs (e.g., Enter IPFS Hash) */
+  input[type="text"] {
+    margin: 20px 0;
+    padding: 10px;
+    width: calc(100% - 22px);
+    box-sizing: border-box;
+  }
+  
+  /* Separate styling for file inputs (e.g., Choose File button) */
+  input[type="file"] {
+    margin: 20px 0;
+    padding: 10px;
+    width: auto; /* allow the browser to size it naturally */
+    box-sizing: border-box;
+    background-color: darkorange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Override for specific buttons to use dark orange */
+  #uploadBtn,
+  #registerButton {
+    background-color: darkorange !important;
+  }
     #hashOutput {
       word-break: break-word;
       margin: 20px 0;
@@ -224,7 +244,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* Slight dark overlay */
+    background: rgba(0, 0, 0, 0.2); /* Slight dark overlay */
     border-radius: 5px;
 }
 
@@ -426,6 +446,9 @@
         <button onclick="toggleSection('whyStoreSection')">Why Store Documents on MyLockChain?</button>
         <button onclick="toggleSection('ipfsIntroSection')">Introducing IPFS</button>
     </div>
+	<p style="font-style: italic; color: #666; margin-top: 10px;">
+  Note: Follow the orange buttons for the required steps; the blue buttons are optional.
+</p>
 
     <!-- Collapsible Section 1: Why Store Documents? -->
     <div id="whyStoreSection" class="hidden-section">
@@ -553,11 +576,20 @@
 
 <h3>Step 1: Prepare Your Document</h3>
     <p>
-      Choose the PDF you want to protect, and optionally do a Maricopa County APN lookup 
-      if that applies to you.
-    </p>
-    <!-- Choose File input -->
-    <input type="file" id="fileInput" accept=".pdf" />
+  Choose the file you want to protect. Supported file types include:
+  <ul>
+    <li>PDF files (.pdf)</li>
+    <li>Text files (.txt)</li>
+    <li>Solidity source files (.sol)</li>
+    <li>Images (.jpg, .jpeg, .png)</li>
+    <li>Videos (.mp4)</li>
+    <!-- Add more types here if needed -->
+  </ul>
+  When you upload a file, it will be stored on IPFS (InterPlanetary File System), a decentralized storage network that distributes your file across many computers, ensuring it remains available and resistant to censorship. At the same time, a unique cryptographic hash is generated from the file’s contents. This hash acts as a digital fingerprint, guaranteeing the file’s integrity—any change to the file will result in a different hash, so you can later verify that the file hasn’t been tampered with.
+</p>
+    <!-- Updated File Input for multiple file types -->
+<input type="file" id="fileInput" accept=".pdf,.txt,.sol,.jpg,.jpeg,.png,.mp4" />
+
     <p id="fileNameOutput"></p>
 <p>If you own property in Maricopa, see info below.</p>
     <!-- Maricopa Lookup toggle -->
@@ -830,6 +862,10 @@
       <em>We recommend waiting if gas is above <strong>5 Gwei</strong> 
       to minimize fees. Transactions at higher gas can be quite costly.</em>
     </p>
+	<p>
+  <strong>What is Gas?</strong><br/>
+  Gas is the fee you pay to process and record transactions on the Ethereum blockchain. Every time you make a transaction—such as registering your document’s hash—gas fees are required to compensate the network's miners (or validators) for validating and executing your transaction. Without gas, your transaction would not be processed, and your document would not be registered on the blockchain.
+</p>
 
     <p>
       A small ETH fee is required to record your document hash on the blockchain.
@@ -841,6 +877,17 @@
     <button onclick="connectWallet('coinbase')">Connect Coinbase Wallet</button>
     <button onclick="disconnectWallet()">Disconnect Wallet</button>
     <p id="walletAddress">Not connected</p>
+	
+	<p>
+  <strong>Why Use a Blockchain Wallet?</strong><br/>
+  A blockchain wallet (like MetaMask or Coinbase Wallet) securely stores your private keys and enables you to sign transactions. It is essential for:
+  <ul>
+    <li>Paying the necessary gas fees to execute transactions.</li>
+    <li>Ensuring that only you have control over your digital assets and records.</li>
+    <li>Providing a secure way to interact with decentralized applications such as MyLockChain.</li>
+  </ul>
+  By connecting your wallet, you can securely register your document’s hash on the blockchain, ensuring that your record is tamper-proof and verifiable.
+</p>
 	  </div>
 		</div>
 
