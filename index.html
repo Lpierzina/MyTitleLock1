@@ -643,6 +643,65 @@
         <a id="viewDeedLink" href="#" target="_blank">Open Maricopa Recorder</a>
       </p>
     </div>
+	  
+	  <!-- New: Property Overview Section -->
+<div id="propertyOverview" style="display:none; margin-top:20px;">
+  <h3>Property Overview</h3>
+  <p><strong>Address:</strong> <span id="propertyAddress"></span></p>
+  <p><strong>Description:</strong> <span id="propertyDescription"></span></p>
+  <p><strong>Lot Size:</strong> <span id="lotSize"></span></p>
+  <p><strong>Section/Township/Range:</strong> <span id="sectionTownshipRange"></span></p>
+</div>
+
+<!-- New: Residential Property Data Section -->
+<div id="residentialData" style="display:none; margin-top:20px;">
+  <h3>Property Features</h3>
+  <p><strong>Construction Year:</strong> <span id="constructionYear"></span></p>
+  <p><strong>Livable Space:</strong> <span id="livableSpace"></span></p>
+  <p><strong>Number of Garages:</strong> <span id="numberOfGarages"></span></p>
+  <!-- Add additional fields as needed -->
+</div>
+
+<!-- New: Similar Properties Section -->
+<div id="similarParcels" style="display:none; margin-top:20px;">
+  <h3>Similar Properties</h3>
+  <table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%;">
+    <thead>
+      <tr>
+        <th>Parcel</th>
+        <th>Land Size</th>
+        <th>Sales Price/Date</th>
+        <th>Full Cash Value</th>
+        <th>Livable SqFt</th>
+        <th>Construction Year</th>
+        <th>Situs Address</th>
+      </tr>
+    </thead>
+    <tbody id="similarParcelsBody"></tbody>
+  </table>
+</div>
+
+<!-- New: Maps and Official Documents Section -->
+<div id="mapIDs" style="display:none; margin-top:20px;">
+  <h3>Maps and Official Documents</h3>
+  <div id="parcelMaps">
+    <h4>Parcel Maps</h4>
+    <ul id="parcelMapsList"></ul>
+  </div>
+  <div id="subdivisionMaps">
+    <h4>Subdivision Maps</h4>
+    <ul id="subdivisionMapsList"></ul>
+  </div>
+  <div id="mcrMaps">
+    <h4>MCR Maps</h4>
+    <ul id="mcrMapsList"></ul>
+  </div>
+  <div id="bookMapMaps">
+    <h4>Book/Map Maps</h4>
+    <ul id="bookMapMapsList"></ul>
+  </div>
+</div>
+
 
     <!-- Official County Links -->
     <div id="countyLinksSection" style="display:none; margin-top:20px;">
@@ -1401,6 +1460,64 @@ async function lookupParcel() {
 
       document.getElementById('ownerSection').style.display = 'block';
     }
+	  // --- New Section: Property Overview ---
+  if (data.PropertyAddress || data.PropertyDescription || data.LotSize || data.SectionTownshipRange) {
+    document.getElementById('propertyAddress').innerText = data.PropertyAddress || 'N/A';
+    document.getElementById('propertyDescription').innerText = data.PropertyDescription || 'N/A';
+    document.getElementById('lotSize').innerText = data.LotSize || 'N/A';
+    document.getElementById('sectionTownshipRange').innerText = data.SectionTownshipRange || 'N/A';
+    document.getElementById('propertyOverview').style.display = 'block';
+  }
+
+  // --- New Section: Residential Property Data ---
+  if (data.ResidentialPropertyData) {
+    const rpd = data.ResidentialPropertyData;
+    document.getElementById('constructionYear').innerText = rpd.ConstructionYear || 'N/A';
+    document.getElementById('livableSpace').innerText = rpd.LivableSpace || 'N/A';
+    document.getElementById('numberOfGarages').innerText = rpd.NumberOfGarages || 'N/A';
+    document.getElementById('residentialData').style.display = 'block';
+  }
+
+  // --- New Section: Similar Parcels ---
+  if (data.SimilarParcels && data.SimilarParcels.length > 0) {
+    const tbody = document.getElementById('similarParcelsBody');
+    tbody.innerHTML = ''; // Clear any existing rows
+    data.SimilarParcels.forEach(parcel => {
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + (parcel.Parcel || 'N/A') + '</td>' +
+        '<td>' + (parcel.LandSize || 'N/A') + '</td>' +
+        '<td>' + (parcel.SalesPriceDate || 'N/A') + '</td>' +
+        '<td>' + (parcel.FullCashValue || 'N/A') + '</td>' +
+        '<td>' + (parcel.LivableSqFootage || 'N/A') + '</td>' +
+        '<td>' + (parcel.ConstructionYear || 'N/A') + '</td>' +
+        '<td>' + (parcel.SitusAddress || 'N/A') + '</td>';
+      tbody.appendChild(tr);
+    });
+    document.getElementById('similarParcels').style.display = 'block';
+  }
+
+  // --- New Section: MapIDs Information ---
+  if (data.MapIDs) {
+    // Function to populate a list given a key in MapIDs and an element ID for the list
+    function populateMapList(mapKey, listId) {
+      if (data.MapIDs[mapKey] && data.MapIDs[mapKey].length > 0) {
+        const list = document.getElementById(listId);
+        list.innerHTML = '';
+        data.MapIDs[mapKey].forEach(mapItem => {
+          const li = document.createElement('li');
+          li.innerHTML = '<a href="' + mapItem.Url + '" target="_blank">' +
+            mapItem.FileName + ' (Updated: ' + mapItem.UpdateDate + ')</a>';
+          list.appendChild(li);
+        });
+      }
+    }
+    populateMapList("Parcel Maps", "parcelMapsList");
+    populateMapList("Subdivision Maps", "subdivisionMapsList");
+    populateMapList("MCR Maps", "mcrMapsList");
+    populateMapList("Book/Map Maps", "bookMapMapsList");
+    document.getElementById('mapIDs').style.display = 'block';
+  }
 
     // 3) Official County Links
     if (data.McrTransitionUrl || data.TreasurersTransitionUrl) {
