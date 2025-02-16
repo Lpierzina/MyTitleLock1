@@ -393,9 +393,10 @@
   - Files up to 0.5MB: <strong>Free</strong><br/>
   - 0.5MB &ndash; 5MB: <strong>$1</strong><br/>
   - 5MB &ndash; 20MB: <strong>$2</strong><br/>
-  - 20MB &ndash; 50MB: <strong>$4</strong><br/>
+  - 20MB &ndash; 50MB: <strong>$5</strong><br/>
   - <em>Note:</em> Files over 50MB aren’t allowed. You’ll see a PayPal payment 
     prompt if your file is above 0.5MB.
+	
 </p>
 <p>
   <em>Why Pin?</em> Without pinning, your file might be garbage-collected if no node 
@@ -1693,7 +1694,7 @@ async function uploadParcelJSON() {
             return 2;
         } else {
             // up to 50 MB
-            return 4;
+            return 5;
         }
     }
 
