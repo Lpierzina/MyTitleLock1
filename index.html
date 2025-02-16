@@ -391,9 +391,9 @@
 <p>
   <strong>Pinning Fees &amp; File Size Limits:</strong><br/>
   - Files up to 0.5MB: <strong>Free</strong><br/>
-  - 0.5MB &ndash; 5MB: <strong>$5</strong><br/>
-  - 5MB &ndash; 20MB: <strong>$10</strong><br/>
-  - 20MB &ndash; 50MB: <strong>$20</strong><br/>
+  - 0.5MB &ndash; 5MB: <strong>$1</strong><br/>
+  - 5MB &ndash; 20MB: <strong>$2</strong><br/>
+  - 20MB &ndash; 50MB: <strong>$4</strong><br/>
   - <em>Note:</em> Files over 50MB aren’t allowed. You’ll see a PayPal payment 
     prompt if your file is above 0.5MB.
 </p>
@@ -1688,12 +1688,12 @@ async function uploadParcelJSON() {
         if (sizeMB <= 0.5) {
             return 0;
         } else if (sizeMB <= 5) {
-            return 5;
+            return 1;
         } else if (sizeMB <= 20) {
-            return 10;
+            return 2;
         } else {
             // up to 50 MB
-            return 20;
+            return 4;
         }
     }
 
